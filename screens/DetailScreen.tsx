@@ -1,4 +1,4 @@
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { BlurView } from "expo-blur"
 import { Box, HStack, Text, useToast, VStack } from "native-base"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -8,8 +8,6 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import uuid from "react-native-uuid"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { addExpense, deleteExpenses, IExpense } from "../features/expenseSlice"
-import { deleteTrip } from "../features/tripSlice"
 import {
     Alert,
     AlertDialog,
@@ -17,10 +15,12 @@ import {
     Input,
     ItemExpense,
     Loading,
-    Select,
+    Select
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import { addExpense, deleteExpenses, IExpense } from "../features/expenseSlice"
+import { deleteTrip } from "../features/tripSlice"
+import { setDateOrTime } from "../utils/DateTimeHelper"
 
 export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
@@ -347,16 +347,10 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                         <HStack space={4}>
                             <Input
                                 handle={() => {
-                                    DateTimePickerAndroid.open({
+                                    setDateOrTime({
+                                        form,
                                         mode: "date",
-                                        value: new Date(),
-                                        onChange: (_, date) => {
-                                            if (date)
-                                                form.setValue(
-                                                    "date",
-                                                    date.toLocaleDateString()
-                                                )
-                                        },
+                                        nameField: "date",
                                     })
                                 }}
                                 disable={true}
@@ -369,16 +363,10 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                             />
                             <Input
                                 handle={() => {
-                                    DateTimePickerAndroid.open({
+                                    setDateOrTime({
                                         mode: "time",
-                                        value: new Date(),
-                                        onChange: (_, time) => {
-                                            if (time)
-                                                form.setValue(
-                                                    "time",
-                                                    `${time.getHours()}:${time.getMinutes()}`
-                                                )
-                                        },
+                                        form,
+                                        nameField: "time",
                                     })
                                 }}
                                 disable={true}

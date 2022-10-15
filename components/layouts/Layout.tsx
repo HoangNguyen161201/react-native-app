@@ -17,7 +17,7 @@ const Layout = ({
         <Box flex={1} backgroundColor={bg}>
             <HStack
                 pb={2}
-                marginTop={"30px"}
+                marginTop={"40px"}
                 flex={0}
                 paddingX={"20px"}
                 alignItems={"center"}

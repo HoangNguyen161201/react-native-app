@@ -33,16 +33,15 @@ let myApp = initializeApp(firebaseConfig)
 export const auth = getAuth(myApp)
 
 
-export const handleAuth = async ({ user: { email, password }, type, auth1}: {
+export const handleAuth = async ({ user: { email, password }, type}: {
     user: {
         email: string
         password: string
-    }, type: 'login' | 'register',
-    auth1: Auth
+    }, type: 'login' | 'register'
 }): Promise<IResultAuth> => {
     switch (type) {
         case 'login':
-            return await signInWithEmailAndPassword(auth1, email, password).then(() => {
+            return await signInWithEmailAndPassword(auth, email, password).then(() => {
                 return {
                     message: 'Login successfully',
                     success: true

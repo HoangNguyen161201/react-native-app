@@ -1,27 +1,31 @@
-import * as Location from "expo-location"
-import { Box, HStack, Input, Text, useToast, VStack } from "native-base"
-import { useEffect, useRef, useState } from "react"
+import {
+    Box,
+    HStack,
+    Input as NInput,
+    Text,
+    useToast,
+    VStack,
+} from "native-base"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
     Animated,
     FlatList,
     Image,
     SafeAreaView,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
 } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { Alert, AlertDialog, Loading, TripItem } from "../components/common"
 import Layout from "../components/layouts/Layout"
+import { deleteExpenses, getAllExpensesByLocal } from "../features/expenseSlice"
+import { deleteTrip, getAllByLocal, Trip } from "../features/tripSlice"
 import {
-    deleteExpenses,
-    getAllExpensesByLocal
-} from "../features/expenseSlice"
-import {
-    deleteTrip,
-    getAllByLocal,
-    Trip
-} from "../features/tripSlice"
+    AdvancedSearch,
+    IAdvancedSearch,
+} from "../components/common/AdvancedSearch"
+import { useForm } from "react-hook-form"
 
 export const TripScreen = ({
     navigation,
@@ -38,10 +42,33 @@ export const TripScreen = ({
     )
     const highAnimate = useRef(new Animated.Value(46)).current
     const [isOpenSearch, setIsOpenSearch] = useState(false)
+    const [isOpenAdvancedSearch, setIsOpenAdvancedSearch] = useState(false)
     const [trips, setTrips] = useState<Array<Trip>>()
     const [searchByTitle, setSearchByTile] = useState("")
+    const [advancedSearch, setAdvancedSearch] = useState<IAdvancedSearch>()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
+
     const toast = useToast()
+
+    const defaultValues = useMemo<IAdvancedSearch>(() => {
+        return {
+            name: "",
+            destination: "",
+            startDate: new Date().toLocaleDateString(),
+            endDate: new Date().toLocaleDateString(),
+        }
+    }, [])
+
+    const form = useForm<IAdvancedSearch>({
+        defaultValues,
+    })
+
+    const { handleSubmit } = form
+
+    const submit = (value: IAdvancedSearch) => {
+        setAdvancedSearch(value)
+        setIsOpenAdvancedSearch(false)
+    }
 
     useEffect(() => {
         if (allTrips) {
@@ -50,15 +77,45 @@ export const TripScreen = ({
     }, [allTrips])
 
     useEffect(() => {
-        if (trips && searchByTitle) {
-            const data = [...trips].filter((item) =>
-                item.name.includes(searchByTitle)
-            )
-            setTrips(data)
-        } else {
-            setTrips(allTrips)
+        console.log(advancedSearch)
+        let data: Trip[] = []
+        if (allTrips) {
+            data = [...allTrips]
         }
-    }, [searchByTitle])
+        if (advancedSearch) {
+            let dataSearch = [...data]
+            if (advancedSearch.name) {
+                dataSearch = dataSearch.filter((item) =>
+                    item.name.includes(advancedSearch.name)
+                )
+            }
+            if (advancedSearch.destination) {
+                dataSearch = dataSearch.filter((item) =>
+                    item.destination.includes(advancedSearch.destination)
+                )
+            }
+            if (advancedSearch.startDate && advancedSearch.endDate) {
+                dataSearch = dataSearch.filter((item) => {
+                    if (
+                        new Date(item.date) >=
+                            new Date(advancedSearch.startDate) &&
+                        new Date(item.date) <= new Date(advancedSearch.endDate)
+                    ) {
+                        return true
+                    }
+                    return false
+                })
+            }
+            setTrips(dataSearch)
+        } else {
+            if (searchByTitle) {
+                const dataSearch = data.filter((item) =>
+                    item.name.includes(searchByTitle)
+                )
+                setTrips(dataSearch)
+            }
+        }
+    }, [searchByTitle, advancedSearch])
 
     useEffect(() => {
         Animated.timing(highAnimate, {
@@ -77,36 +134,6 @@ export const TripScreen = ({
         handleDataTrips()
     }, [])
 
-    const getLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== "granted") {
-            console.log("loi rooi")
-            return
-        }
-
-        let location = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.BestForNavigation,
-        })
-
-        let address = await Location.reverseGeocodeAsync({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-        })
-        if (location) {
-            console.log("nguyen quang hoang", location.coords, address.length)
-        }
-        // try {
-
-        //   console.log('nguyen quang hoang')
-        //   Geocoder.init('AIzaSyAmoBrBpJwJCCEqK4-J95OmpC22YXIahAY')
-        //   const data = await Geocoder.from(41.89, 12.49)
-        //   console.log(data)
-        //   console.log('nguyen quang hoang')
-        // } catch (error) {
-        //   console.log(error)
-        // }
-    }
-
     const handleDelete = () => {
         setIsOpenAlert(false)
         if (tripSelected) {
@@ -124,6 +151,17 @@ export const TripScreen = ({
             },
         })
         navigation.navigate("Trips")
+    }
+
+    const handleReset = ()=> {
+        console.log('nguyen quang hoang')
+        setSearchByTile('')
+        setAdvancedSearch({
+            destination: '',
+            endDate: '',
+            name: '',
+            startDate: '',
+        })
     }
 
     return (
@@ -149,6 +187,56 @@ export const TripScreen = ({
                         style={{ width: "60%" }}
                     />
                 </Box>
+                <HStack
+                    space={4}
+                    position={"absolute"}
+                    right={"20px"}
+                    top={"80px"}
+                >
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsOpenAdvancedSearch((state) => !state)
+                        }}
+                        style={[
+                            style.search,
+                            {
+                                backgroundColor: "#B1B2FF",
+                                borderBottomLeftRadius: 0,
+                                borderBottomRightRadius: 0,
+                            },
+                        ]}
+                    >
+                        <Icon
+                            color={"white"}
+                            style={{
+                                padding: 6,
+                            }}
+                            size={20}
+                            name="search-outline"
+                        ></Icon>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={ handleReset }
+                        style={[
+                            style.search,
+                            {
+                                backgroundColor: "#FF8888",
+
+                                borderBottomLeftRadius: 0,
+                                borderBottomRightRadius: 0,
+                            },
+                        ]}
+                    >
+                        <Icon
+                            style={{
+                                padding: 6,
+                                color: "white",
+                            }}
+                            size={20}
+                            name="refresh-outline"
+                        ></Icon>
+                    </TouchableOpacity>
+                </HStack>
                 <Box
                     padding={"20px"}
                     flex={1}
@@ -181,7 +269,7 @@ export const TripScreen = ({
                                     </Text>
                                 </Text>
                             </Animated.View>
-                            <Input
+                            <NInput
                                 value={searchByTitle}
                                 onChange={(event) => {
                                     setSearchByTile(event.nativeEvent.text)
@@ -294,6 +382,12 @@ export const TripScreen = ({
                 description={"Are you sue to remove this trip ?"}
                 isOpen={isOpenAlert}
                 setIsOpen={(value: boolean) => setIsOpenAlert(value)}
+            />
+            <AdvancedSearch
+                isOpen={isOpenAdvancedSearch}
+                form={form}
+                setIsOpen={(value: boolean) => setIsOpenAdvancedSearch(value)}
+                handle={handleSubmit(submit)}
             />
         </Layout>
     )

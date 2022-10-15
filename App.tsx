@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer"
 import { NavigationContainer } from "@react-navigation/native"
-import { NativeBaseProvider, useToast } from "native-base"
+import { NativeBaseProvider } from "native-base"
 import Icon from "react-native-vector-icons/Ionicons"
 import { Provider } from "react-redux"
 import { store } from "./app/store"
@@ -15,12 +15,10 @@ import {
     TripScreen,
     UpdateTripScreen
 } from "./screens"
-import { ENV_CONTACT_NAME } from "./env"
 
 const Drawer = createDrawerNavigator()
 
 export default function App() {
-    console.log(ENV_CONTACT_NAME)
     return (
         <Provider store={store}>
             <NativeBaseProvider>
@@ -39,7 +37,7 @@ export default function App() {
                             headerShown: false,
                         }}
                         drawerContent={(props) => <CustomDrawer {...props} />}
-                        initialRouteName="Intro"
+                        initialRouteName="Home"
                     >
                         <Drawer.Screen
                             options={{

@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/drawer"
 import { Avatar, Box, HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { auth } from "../../utils/dbHelper"
 
 export const CustomDrawer = (props: DrawerContentComponentProps) => {
     return (
@@ -36,7 +37,10 @@ export const CustomDrawer = (props: DrawerContentComponentProps) => {
             </Box>
             <Box p={'10px'}>
                 <TouchableOpacity
-                    onPressOut={() => {}}
+                    onPressOut={async () => {
+                        await auth.signOut()
+                        props.navigation.navigate('Login')
+                    }}
                     style={{
                         width: "100%",
                         backgroundColor: "#FF8888",

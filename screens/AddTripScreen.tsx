@@ -1,4 +1,4 @@
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
+import { yupResolver } from "@hookform/resolvers/yup"
 import { BlurView } from "expo-blur"
 import { Box, Text, useToast, VStack } from "native-base"
 import { useMemo, useState } from "react"
@@ -8,20 +8,23 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import uuid from "react-native-uuid"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch } from "../app/hooks"
-import { addTrip, Trip } from "../features/tripSlice"
-import Layout from "../components/layouts/Layout"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { addTripForm } from "../utils/validate"
 import {
     Alert,
+    ConfirmData,
     DialogGetPicture,
     Input,
     Loading,
-    Switch,
+    Switch
 } from "../components/common"
+import Layout from "../components/layouts/Layout"
+import { addTrip, Trip } from "../features/tripSlice"
+import { setDateOrTime } from "../utils/DateTimeHelper"
+import { addTripForm } from "../utils/validate"
 
 export const AddTripScreen = ({ navigation }: { navigation: any }) => {
     const [isLoading, setIsLoading] = useState(false)
+    const [data, setData] = useState<Trip>()
+    const [isOpenConfirm, setIsOpenConfirm] = useState(false)
     const [img, setImg] = useState("../assets/trip.png")
     const [openGetPicture, setOpenGetPicture] = useState(false)
     const dispatch = useAppDispatch()
@@ -46,26 +49,34 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
 
     const { handleSubmit } = form
 
-    const submit = async (value: Trip) => {
+    const submit = (value: Trip) => {
         const newTrip = {
             ...value,
             id: uuid.v4(),
         }
-        dispatch(addTrip(newTrip))
-        form.reset(defaultValues)
-        setImg("../assets/trip.png")
+        setData(newTrip)
+        setIsOpenConfirm(true)
+    }
 
-        toast.show({
-            render: () => {
-                return (
-                    <Alert
-                        type={"success"}
-                        message={"Add new trip successfully"}
-                    />
-                )
-            },
-        })
-        setIsLoading(false)
+    const handleAdd = async () => {
+        if (data) {
+            dispatch(addTrip(data))
+            form.reset(defaultValues)
+            setImg("../assets/trip.png")
+
+            toast.show({
+                render: () => {
+                    return (
+                        <Alert
+                            type={"success"}
+                            message={"Add new trip successfully"}
+                        />
+                    )
+                },
+            })
+            setIsLoading(false)
+            setIsOpenConfirm(false)
+        }
     }
 
     return (
@@ -154,16 +165,10 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                         />
                         <Input
                             handle={() => {
-                                DateTimePickerAndroid.open({
-                                    mode: "date",
-                                    value: new Date(),
-                                    onChange: (event, date) => {
-                                        if (date)
-                                            form.setValue(
-                                                "date",
-                                                date.toLocaleDateString()
-                                            )
-                                    },
+                                setDateOrTime({
+                                    mode: 'date',
+                                    form,
+                                    nameField: 'date'
                                 })
                             }}
                             disable={true}
@@ -176,9 +181,6 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                         <Switch form={form} label="Dangerous" name="isRisk" />
                     </VStack>
                     <TouchableOpacity
-                        onPressIn={() => {
-                            setIsLoading(true)
-                        }}
                         onPressOut={handleSubmit(submit)}
                         style={{
                             backgroundColor: "#D2DAFF",
@@ -213,6 +215,13 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                 setOpenGetPicture={(isOpen: boolean) =>
                     setOpenGetPicture(isOpen)
                 }
+            />
+            <ConfirmData
+                setLoading={(value: boolean) => setIsLoading(true)}
+                isOpen={isOpenConfirm}
+                data={data}
+                handle={handleAdd}
+                setIsOpen={setIsOpenConfirm}
             />
             {isLoading && <Loading />}
         </Layout>

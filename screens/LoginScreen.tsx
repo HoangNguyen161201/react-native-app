@@ -1,12 +1,12 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import { Text, useToast, VStack } from "native-base"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
-import { IUser } from "../features/userSlice"
-import { yupResolver } from "@hookform/resolvers/yup"
-import { loginForm } from "../utils/validate"
 import { Alert, Input } from "../components/common"
-import { auth, handleAuth, IResultAuth } from "../utils/dbHelper"
+import { IUser } from "../features/userSlice"
+import { handleAuth, IResultAuth } from "../utils/dbHelper"
+import { loginForm } from "../utils/validate"
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
@@ -32,8 +32,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                     email,
                     password,
                 },
-                type: "login",
-                auth1: auth
+                type: "login"
             })
             toast.show({
                 render: () => {
