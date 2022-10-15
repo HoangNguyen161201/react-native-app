@@ -4,28 +4,28 @@ import {
     Input as NInput,
     Text,
     useToast,
-    VStack,
+    VStack
 } from "native-base"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { useForm } from "react-hook-form"
 import {
     Animated,
     FlatList,
     Image,
     SafeAreaView,
     StyleSheet,
-    TouchableOpacity,
+    TouchableOpacity
 } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { Alert, AlertDialog, Loading, TripItem } from "../components/common"
-import Layout from "../components/layouts/Layout"
-import { deleteExpenses, getAllExpensesByLocal } from "../features/expenseSlice"
-import { deleteTrip, getAllByLocal, Trip } from "../features/tripSlice"
 import {
     AdvancedSearch,
-    IAdvancedSearch,
+    IAdvancedSearch
 } from "../components/common/AdvancedSearch"
-import { useForm } from "react-hook-form"
+import Layout from "../components/layouts/Layout"
+import { deleteExpenses } from "../features/expenseSlice"
+import { deleteTrip, Trip } from "../features/tripSlice"
 
 export const TripScreen = ({
     navigation,
@@ -125,15 +125,6 @@ export const TripScreen = ({
         }).start()
     }, [isOpenSearch])
 
-    const handleDataTrips = async () => {
-        await dispatch(getAllByLocal())
-        dispatch(getAllExpensesByLocal())
-    }
-
-    useEffect(() => {
-        handleDataTrips()
-    }, [])
-
     const handleDelete = () => {
         setIsOpenAlert(false)
         if (tripSelected) {
@@ -154,7 +145,6 @@ export const TripScreen = ({
     }
 
     const handleReset = ()=> {
-        console.log('nguyen quang hoang')
         setSearchByTile('')
         setAdvancedSearch({
             destination: '',

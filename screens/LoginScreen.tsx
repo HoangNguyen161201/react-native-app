@@ -34,6 +34,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 },
                 type: "login"
             })
+            
             toast.show({
                 render: () => {
                     return (

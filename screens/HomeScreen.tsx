@@ -1,8 +1,26 @@
-import { Box, HStack, Text, VStack } from "native-base"
+import { BlurView } from "expo-blur"
+import { Box, HStack, Image, ScrollView, Text, VStack } from "native-base"
+import { useEffect } from "react"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { Feature, TripItemHome } from "../components/common"
 import Layout from "../components/layouts/Layout"
+import { getAllExpensesByLocal } from "../features/expenseSlice"
+import { getAllByLocal, updateTripSelected } from "../features/tripSlice"
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
+    const allTrips = useAppSelector((state) => state.tripsReducer.data)
+    const dispatch = useAppDispatch()
+    const handleDataTrips = async () => {
+        await dispatch(getAllByLocal())
+        dispatch(getAllExpensesByLocal())
+    }
+
+    useEffect(() => {
+        handleDataTrips()
+    }, [])
+
     return (
         <Layout navigation={navigation} bg={"white"}>
             <VStack p={"20px"} space={4} h={"full"}>
@@ -19,9 +37,29 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
                         >
                             Trips
                         </Text>
-                        <Icon size={20} name="arrow-forward-outline"></Icon>
+                        <TouchableOpacity onPress={()=> navigation.navigate('Trips')}>
+                            <Icon size={20} name="arrow-forward-outline"></Icon>
+                        </TouchableOpacity>
                     </HStack>
-                    <Box bg={"red.500"} w={"full"} h={'500px'}></Box>
+                    <ScrollView
+                        style={{
+                            height: "43%",
+                        }}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {allTrips &&
+                            allTrips.map((item, index) => (
+                                <TripItemHome
+                                    key={index}
+                                    handle={() => {
+                                        dispatch(updateTripSelected(item))
+                                        navigation.navigate("Detail")
+                                    }}
+                                    item={item}
+                                />
+                            ))}
+                    </ScrollView>
                 </VStack>
                 <VStack space={3}>
                     <Text
@@ -33,88 +71,40 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
                     </Text>
                     <VStack space={4} w={"full"}>
                         <HStack space={4} w={"full"}>
-                            <VStack
-                                bg={"#FF8888"}
-                                py={3}
-                                flex={1}
-                                borderRadius={10}
-                                space={2}
-                                alignItems={"center"}
-                            >
-                                <Icon
-                                    size={25}
-                                    name="cloud-upload-outline"
-                                ></Icon>
-                                <Text
-                                    fontSize={"16px"}
-                                    w={"full"}
-                                    textAlign={"center"}
-                                >
-                                    Backup
-                                </Text>
-                            </VStack>
-                            <VStack
-                                bg={"#AAC4FF"}
-                                py={3}
-                                flex={1}
-                                borderRadius={10}
-                                space={2}
-                                alignItems={"center"}
-                            >
-                                <Icon
-                                    size={25}
-                                    name="cloud-upload-outline"
-                                ></Icon>
-                                <Text
-                                    fontSize={"16px"}
-                                    w={"full"}
-                                    textAlign={"center"}
-                                >
-                                    Backup
-                                </Text>
-                            </VStack>
+                            <Feature
+                                iconName={"person-outline"}
+                                bg="#AAC4FF"
+                                handle={() => {
+                                    navigation.navigate("Profile")
+                                }}
+                                title={"Profile"}
+                            />
+                            <Feature
+                                iconName={"call-outline"}
+                                bg="#AAC4FF"
+                                handle={() => {
+                                    navigation.navigate("Contact")
+                                }}
+                                title={"Contact"}
+                            />
                         </HStack>
                         <HStack space={4} w={"full"}>
-                            <VStack
-                                bg={"#C7F8C3"}
-                                py={3}
-                                flex={1}
-                                borderRadius={10}
-                                space={2}
-                                alignItems={"center"}
-                            >
-                                <Icon
-                                    size={25}
-                                    name="cloud-upload-outline"
-                                ></Icon>
-                                <Text
-                                    fontSize={"16px"}
-                                    w={"full"}
-                                    textAlign={"center"}
-                                >
-                                    Backup
-                                </Text>
-                            </VStack>
-                            <VStack
-                                bg={"#FFDE6A"}
-                                py={3}
-                                flex={1}
-                                borderRadius={10}
-                                space={2}
-                                alignItems={"center"}
-                            >
-                                <Icon
-                                    size={25}
-                                    name="cloud-upload-outline"
-                                ></Icon>
-                                <Text
-                                    fontSize={"16px"}
-                                    w={"full"}
-                                    textAlign={"center"}
-                                >
-                                    Backup
-                                </Text>
-                            </VStack>
+                            <Feature
+                                iconName={"add-outline"}
+                                bg="#AAC4FF"
+                                handle={() => {
+                                    navigation.navigate("Add new")
+                                }}
+                                title={"Add trip"}
+                            />
+                            <Feature
+                                iconName={"cloud-upload-outline"}
+                                bg="#AAC4FF"
+                                handle={() => {
+                                    console.log("hoang nguyen quang")
+                                }}
+                                title={"Backup"}
+                            />
                         </HStack>
                     </VStack>
                 </VStack>

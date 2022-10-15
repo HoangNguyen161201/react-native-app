@@ -22,28 +22,13 @@ const Layout = ({
                 paddingX={"20px"}
                 alignItems={"center"}
                 justifyContent={"space-between"}
-                >
+            >
                 <Box
                     onTouchEnd={() => {
                         navigation.openDrawer()
                     }}
-                    >
-                    {navigation.canGoBack() ? (
-                        <Icon
-                        color={color}
-                        onPress={() => {
-                            navigation.goBack()
-                        }}
-                        name="arrow-back-outline"
-                        size={25}
-                        ></Icon>
-                        ) : (
-                            <Icon
-                            color={color}
-                            name="menu-outline"
-                            size={30}
-                            ></Icon>
-                    )}
+                >
+                    <Icon color={color} name="menu-outline" size={30}></Icon>
                 </Box>
                 <HStack alignItems={"center"} space={4}>
                     <Text color={color}>Nguyen Quang Hoang</Text>
@@ -53,7 +38,7 @@ const Layout = ({
                             uri: "https://avatars.dicebear.com/api/big-smile/:seed.png",
                         }}
                         size={"35px"}
-                        >
+                    >
                         --
                     </Avatar>
                 </HStack>
