@@ -3,13 +3,15 @@ import { Text, useToast, VStack } from "native-base"
 import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
+import { useAppDispatch } from "../app/hooks"
 import { Alert, Input } from "../components/common"
-import { IUser } from "../features/userSlice"
+import { IUser, loginAccount } from "../features/userSlice"
 import { handleAuth, IResultAuth } from "../utils/dbHelper"
 import { loginForm } from "../utils/validate"
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
+    const dispatch = useAppDispatch()
     const defaultValues = useMemo<IUser>(() => {
         return {
             email: "",
@@ -34,7 +36,6 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 },
                 type: "login"
             })
-            
             toast.show({
                 render: () => {
                     return (
@@ -45,6 +46,11 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                     )
                 },
             })
+            dispatch(loginAccount({
+                email,
+                password
+            }))
+            navigation.navigate('Home')
         }
     }
 

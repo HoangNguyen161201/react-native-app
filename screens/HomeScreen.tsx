@@ -11,6 +11,7 @@ import { getAllByLocal, updateTripSelected } from "../features/tripSlice"
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
     const allTrips = useAppSelector((state) => state.tripsReducer.data)
+    const isLogin = useAppSelector(state => state.userReducer.isLogin)
     const dispatch = useAppDispatch()
     const handleDataTrips = async () => {
         await dispatch(getAllByLocal())
@@ -19,6 +20,12 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
 
     useEffect(() => {
         handleDataTrips()
+    }, [])
+
+    useEffect(()=> {
+        if(!isLogin) {
+            navigation.navigate('Login')
+        }
     }, [])
 
     return (
