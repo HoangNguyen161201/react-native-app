@@ -26,15 +26,14 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
 
     const { handleSubmit } = form
 
-    const submit = async ({email, password}: IUser) => {
-    
+    const submit = async ({ email, password }: IUser) => {
         if (email && password) {
             const response: IResultAuth = await handleAuth({
                 user: {
                     email,
                     password,
                 },
-                type: "login"
+                type: "login",
             })
             toast.show({
                 render: () => {
@@ -46,11 +45,19 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                     )
                 },
             })
-            dispatch(loginAccount({
-                email,
-                password
-            }))
-            navigation.navigate('Home')
+            if (response.success) {
+                dispatch(
+                    loginAccount({
+                        email,
+                        password,
+                    })
+                )
+                form.reset({
+                    email: '',
+                    password: '',
+                })
+                navigation.navigate("Home")
+            }
         }
     }
 

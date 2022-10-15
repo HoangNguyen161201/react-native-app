@@ -49,7 +49,14 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                     )
                 },
             })
-            navigation.navigate('Login')
+            if (response.success) {
+                form.reset({
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                })
+                navigation.navigate("Login")
+            }
         }
     }
 

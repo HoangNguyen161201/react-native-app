@@ -62,7 +62,7 @@ export const handleAuth = async ({ user: { email, password }, type}: {
             }).catch((e) => {
                 console.log(e)
                 return {
-                    message: 'System is error',
+                    message: 'Email already exists',
                     success: false
                 }
             })
