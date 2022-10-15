@@ -5,9 +5,12 @@ import {
 } from "@react-navigation/drawer"
 import { Avatar, Box, HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useAppDispatch } from "../../app/hooks"
+import { logOutAccount } from "../../features/userSlice"
 import { auth } from "../../utils/dbHelper"
 
 export const CustomDrawer = (props: DrawerContentComponentProps) => {
+    const dispatch = useAppDispatch()
     return (
         <VStack flex={1}>
             <HStack
@@ -35,11 +38,13 @@ export const CustomDrawer = (props: DrawerContentComponentProps) => {
                     <DrawerItemList {...props} />
                 </DrawerContentScrollView>
             </Box>
-            <Box p={'10px'}>
+            <Box p={"10px"}>
                 <TouchableOpacity
                     onPressOut={async () => {
                         await auth.signOut()
-                        props.navigation.navigate('Login')
+                        dispatch(logOutAccount())
+
+                        props.navigation.navigate("Login")
                     }}
                     style={{
                         width: "100%",

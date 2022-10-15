@@ -28,13 +28,19 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    loginAccount: (state, {payload}: PayloadAction<IUser>) => {
+    loginAccount: (state, { payload }: PayloadAction<IUser>) => {
       state.infoUser = payload
-      state.isLogin = true 
+      state.isLogin = true
     },
-   
+    logOutAccount: (state, _: PayloadAction<undefined>) => {
+      state.infoUser = {
+        email: ''
+      }
+      state.isLogin = false
+    }
+
   },
 })
 
-export const { loginAccount } = userSlice.actions
+export const { loginAccount, logOutAccount } = userSlice.actions
 export default userSlice.reducer
