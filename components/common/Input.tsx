@@ -28,10 +28,7 @@ export const Input = ({
     handle,
     flex,
     isNumber = false,
-    match,
     type,
-    checkEmail = false,
-    strongPassword = false,
 }: IInput) => {
     const {
         control,
@@ -67,6 +64,7 @@ export const Input = ({
                                 name={iconName}
                             />
                         }
+                        backgroundColor={disable ? 'gray.200': 'white'}
                         borderRadius={8}
                         placeholder={placeholder}
                         fontSize={"14px"}

@@ -97,13 +97,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             borderWidth={1}
                             borderColor={"#7E80FF"}
                             overflow={"hidden"}
-                            onTouchEnd={async () => {
-                                if (openGetPicture) {
-                                    setOpenGetPicture(false)
-                                    return
-                                }
-                                setOpenGetPicture(true)
-                            }}
+                            onTouchEnd={()=> setOpenGetPicture(state => !state)}
                         >
                             <Image
                                 style={{

@@ -37,7 +37,7 @@ export default function App() {
                             headerShown: false,
                         }}
                         drawerContent={(props) => <CustomDrawer {...props} />}
-                        initialRouteName="Intro"
+                        initialRouteName="Home"
                     >
                         <Drawer.Screen
                             options={{

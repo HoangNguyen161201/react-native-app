@@ -16,3 +16,6 @@ export const addTripForm = yup.object({
     destination: yup.string().required("please, don't leave it blank")
 }) 
 
+export const profileForm = yup.object({
+    name: yup.string().required("please, don't leave it blank"),
+}) 

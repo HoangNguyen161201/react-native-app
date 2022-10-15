@@ -1,8 +1,7 @@
-import { FirebaseError, initializeApp } from 'firebase/app'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { initializeApp } from 'firebase/app'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, User } from 'firebase/auth'
 import { getDatabase, ref, remove, set } from 'firebase/database'
-import { IExpense } from '../features/expenseSlice'
-import { Trip } from '../features/tripSlice'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, Auth, connectAuthEmulator } from 'firebase/auth'
 import {
     FIREBASE_APP_ID,
     FIREBASE_DOMAIN,
@@ -10,21 +9,25 @@ import {
     FIREBASE_MEASUREMENT_ID,
     FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET } from '../env'
+    FIREBASE_STORAGE_BUCKET
+} from '../env'
+import { IExpense } from '../features/expenseSlice'
+import { Trip } from '../features/tripSlice'
 
 export interface IResultAuth {
     message: string
     success: boolean
+    account?: User
 }
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDA3UTHx_OQc1pyoFR9ebBOJPLXKdm8xxU",
-    authDomain: "react-app-b1bf3.firebaseapp.com",
-    projectId: "react-app-b1bf3",
-    storageBucket: "react-app-b1bf3.appspot.com",
-    messagingSenderId: "143432247639",
-    appId: "1:143432247639:web:9669f7cc24c72636c83612",
-    measurementId: "G-F36P5K7WNC"
+    apiKey: FIREBASE_KEY,
+    authDomain: FIREBASE_DOMAIN,
+    projectId: FIREBASE_PROJECT_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+    appId: FIREBASE_APP_ID,
+    measurementId: FIREBASE_MEASUREMENT_ID
 }
 
 let myApp = initializeApp(firebaseConfig)
@@ -32,8 +35,7 @@ let myApp = initializeApp(firebaseConfig)
 // auth
 export const auth = getAuth(myApp)
 
-
-export const handleAuth = async ({ user: { email, password }, type}: {
+export const handleAuth = async ({ user: { email, password }, type }: {
     user: {
         email: string
         password: string
@@ -41,10 +43,11 @@ export const handleAuth = async ({ user: { email, password }, type}: {
 }): Promise<IResultAuth> => {
     switch (type) {
         case 'login':
-            return await signInWithEmailAndPassword(auth, email, password).then(() => {
+            return await signInWithEmailAndPassword(auth, email, password).then((e) => {
                 return {
                     message: 'Login successfully',
-                    success: true
+                    success: true,
+                    account: e.user
                 }
             }).catch((e) => {
                 console.log(e)
@@ -80,18 +83,19 @@ export const handleAuth = async ({ user: { email, password }, type}: {
 // action with db
 const db = getDatabase(myApp)
 
-export const backUp = ({ trips, expenses, user }: {
-    trips: Array<Trip>
-    expenses: Array<IExpense>
-    user: any
-}) => {
-    //Clear data on firebase
-    remove(ref(db, "trips"))
-    remove(ref(db, "expenses"))
-    remove(ref(db, "user"))
+//Back up data
+export const BackUpData = async () => {
+    const trips = await AsyncStorage.getItem("trips");
+    const expenses = await AsyncStorage.getItem("expenses");
 
-    //Backup data to firebase
-    set(ref(db, "Trip"), trips)
-    set(ref(db, "Expense"), expenses)
-    set(ref(db, "User"), user)
-}
+    remove(ref(db, "Users/" + auth.currentUser?.uid));
+
+    await set(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Trips"),
+        trips ? JSON.parse(trips) : []
+    );
+    await set(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Expenses"),
+        expenses ? JSON.parse(expenses) : []
+    );
+};

@@ -3,11 +3,22 @@ import Layout from "../components/layouts/Layout"
 import Icon from "react-native-vector-icons/Ionicons"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { useForm } from "react-hook-form"
-import { useMemo } from "react"
-import { Input } from "../components/common"
+import { useEffect, useMemo, useState } from "react"
+import { DialogGetPicture, Input } from "../components/common"
+import { IUser, updateProfile } from "../features/userSlice"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { yupResolver } from '@hookform/resolvers/yup'
+import { profileForm } from "../utils/validate"
 
 export const ProfileScreen = ({ navigation }: { navigation: any }) => {
-    const defaultValues = useMemo(() => {
+    const dispatch = useAppDispatch()
+    const userInfo = useAppSelector(state => state.userReducer.infoUser)
+    const [openGetPicture, setOpenGetPicture] = useState(false)
+    const [img, setImg] = useState(
+        "https://avatars.dicebear.com/api/big-smile/:seed.png"
+    )
+
+    const defaultValues = useMemo<IUser>(() => {
         return {
             name: "",
             email: "",
@@ -15,16 +26,26 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
             address: "",
             facebook: "",
             job: "",
+            avatar: ''
         }
     }, [])
 
     const form = useForm({
         defaultValues,
+        resolver: yupResolver(profileForm)
     })
+
+    useEffect(()=> {
+        if(userInfo) {
+            form.reset(userInfo)
+        }
+    }, [userInfo])
 
     const { handleSubmit } = form
 
-    const submit = async (value: any) => {}
+    const submit = async (value: IUser) => {
+        dispatch(updateProfile(value))
+    }
     return (
         <Layout navigation={navigation} bg={"white"}>
             <ScrollView>
@@ -36,13 +57,14 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                         <Avatar
                             bg={"#D2DAFF"}
                             source={{
-                                uri: "https://avatars.dicebear.com/api/big-smile/:seed.png",
+                                uri: img,
                             }}
                             size={"150px"}
                         >
                             --
                         </Avatar>
                         <TouchableOpacity
+                            onPress={() => setOpenGetPicture((state) => !state)}
                             style={{
                                 marginTop: -20,
                             }}
@@ -73,6 +95,7 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                             placeholder={"Enter your name"}
                         />
                         <Input
+                            disable
                             required
                             iconName="mail-outline"
                             form={form}
@@ -81,6 +104,7 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                             placeholder={"Enter your name"}
                         />
                         <Input
+                            isNumber
                             iconName="call-outline"
                             form={form}
                             name={"phone"}
@@ -135,6 +159,16 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                     </Box>
                 </VStack>
             </ScrollView>
+            <DialogGetPicture
+                setImg={(image: string) => {
+                    setImg(image)
+                    form.setValue("avatar", image)
+                }}
+                openGetPicture={openGetPicture}
+                setOpenGetPicture={(isOpen: boolean) =>
+                    setOpenGetPicture(isOpen)
+                }
+            />
         </Layout>
     )
 }

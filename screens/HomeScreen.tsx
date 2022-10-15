@@ -1,17 +1,19 @@
 import { BlurView } from "expo-blur"
-import { Box, HStack, Image, ScrollView, Text, VStack } from "native-base"
+import { Box, HStack, Image, ScrollView, Text, useToast, VStack } from "native-base"
 import { useEffect } from "react"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { Feature, TripItemHome } from "../components/common"
+import { Alert, EmptyTrips, Feature, TripItemHome } from "../components/common"
 import Layout from "../components/layouts/Layout"
 import { getAllExpensesByLocal } from "../features/expenseSlice"
 import { getAllByLocal, updateTripSelected } from "../features/tripSlice"
+import { BackUpData } from "../utils/dbHelper"
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
+    const toast = useToast()
     const allTrips = useAppSelector((state) => state.tripsReducer.data)
-    const isLogin = useAppSelector(state => state.userReducer.isLogin)
+    const isLogin = useAppSelector((state) => state.userReducer.isLogin)
     const dispatch = useAppDispatch()
     const handleDataTrips = async () => {
         await dispatch(getAllByLocal())
@@ -22,9 +24,9 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
         handleDataTrips()
     }, [])
 
-    useEffect(()=> {
-        if(!isLogin) {
-            navigation.navigate('Login')
+    useEffect(() => {
+        if (!isLogin) {
+            navigation.navigate("Login")
         }
     }, [])
 
@@ -44,19 +46,21 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
                         >
                             Trips
                         </Text>
-                        <TouchableOpacity onPress={()=> navigation.navigate('Trips')}>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate("Trips")}
+                        >
                             <Icon size={20} name="arrow-forward-outline"></Icon>
                         </TouchableOpacity>
                     </HStack>
-                    <ScrollView
-                        style={{
-                            height: "43%",
-                        }}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        {allTrips &&
-                            allTrips.map((item, index) => (
+                    {allTrips.length ? (
+                        <ScrollView
+                            style={{
+                                height: "43%",
+                            }}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            {allTrips.map((item, index) => (
                                 <TripItemHome
                                     key={index}
                                     handle={() => {
@@ -66,7 +70,10 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
                                     item={item}
                                 />
                             ))}
-                    </ScrollView>
+                        </ScrollView>
+                    ) : (
+                        <EmptyTrips navigation={navigation} />
+                    )}
                 </VStack>
                 <VStack space={3}>
                     <Text
@@ -107,8 +114,18 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
                             <Feature
                                 iconName={"cloud-upload-outline"}
                                 bg="#AAC4FF"
-                                handle={() => {
-                                    console.log("hoang nguyen quang")
+                                handle={async () => {
+                                    await BackUpData()
+                                    toast.show({
+                                        render: () => {
+                                            return (
+                                                <Alert
+                                                    type={"success"}
+                                                    message={"Backup data successfully"}
+                                                />
+                                            )
+                                        },
+                                    })
                                 }}
                                 title={"Backup"}
                             />

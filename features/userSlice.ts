@@ -11,6 +11,8 @@ export interface IUser {
   address?: string
   phone?: string
   facebook?: string
+  id?: string
+  avatar?: string
 }
 
 interface IUserState {
@@ -25,7 +27,6 @@ const initialState: IUserState = {
 
 export const userSlice = createSlice({
   name: 'user',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     loginAccount: (state, { payload }: PayloadAction<IUser>) => {
@@ -37,10 +38,16 @@ export const userSlice = createSlice({
         email: ''
       }
       state.isLogin = false
+    },
+    updateProfile: (state, { payload }: PayloadAction<IUser>) => {
+      state.infoUser = {
+        ...state.infoUser,
+        ...payload
+      }
     }
 
   },
 })
 
-export const { loginAccount, logOutAccount } = userSlice.actions
+export const { loginAccount, logOutAccount, updateProfile } = userSlice.actions
 export default userSlice.reducer

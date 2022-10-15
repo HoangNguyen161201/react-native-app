@@ -49,7 +49,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 dispatch(
                     loginAccount({
                         email,
-                        password,
+                        id: response.account?.uid
                     })
                 )
                 form.reset({
