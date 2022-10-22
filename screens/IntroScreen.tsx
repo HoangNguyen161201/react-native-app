@@ -35,9 +35,10 @@ export const IntroScreen = ({ navigation }: { navigation: any }) => {
                             return
                         }
 
-                        let location = await Location.getCurrentPositionAsync({});
-                        console.log(location)
-                        
+                        let location = await Location.getCurrentPositionAsync({})
+                        const address = await Location.reverseGeocodeAsync(location.coords)
+                        console.log(location, address)
+
                     }}>get location</Button>
                     <Image
                         source={require("../assets/CLOTHE.png")}
