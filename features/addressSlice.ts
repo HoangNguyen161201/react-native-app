@@ -3,7 +3,6 @@ import * as Location from 'expo-location'
 
 export interface IAddress {
     address: string,
-    location?: Location.LocationObject
 }
 
 // Define the initial state using that type
@@ -22,11 +21,10 @@ export const getAddress = createAsyncThunk(
         }
 
         let location = await Location.getCurrentPositionAsync({})
-        const address = await Location.reverseGeocodeAsync(location.coords)
-        return {
-            address: `${address[0].street}, ${address[0].country}, ${address[0].district}, ${address[0].streetNumber}`,
-            location
-        }
+        const data = await Location.reverseGeocodeAsync(location.coords)
+        let address = `${data[0].city} city, ${data[0].country}, ${data[0].region} region, ${data[0].street} street`
+        console.log(address)
+        return address
     }
 )
 
@@ -39,12 +37,8 @@ export const addressSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getAddress.fulfilled, (state, { payload }) => {
-            if (payload?.address) {
-                state = {
-                    ...state,
-                    address: payload.address,
-                    location: payload.location
-                }
+            if (payload) {
+                state.address = payload
             }
         })
     }
