@@ -33,7 +33,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const [isOpenAddExpense, setIsOpen] = useState(false)
     const dispatch = useAppDispatch()
     const expenses = useAppSelector((state) => state.expensesReducer.data)
-    const address = useAppSelector(state => state.addressReducer.address)
+    const address = useAppSelector(state => state.addressReducer.address )
 
     useEffect(() => {
         if (expenses && trip) {
