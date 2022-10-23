@@ -1,10 +1,9 @@
-import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import * as Location from 'expo-location'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface IAddress {
-    address: string
+    address: string,
+    location?: Location.LocationObject
 }
 
 // Define the initial state using that type
@@ -24,23 +23,28 @@ export const getAddress = createAsyncThunk(
 
         let location = await Location.getCurrentPositionAsync({})
         const address = await Location.reverseGeocodeAsync(location.coords)
-        console.log(address)
-        return address[0].name
+        return {
+            address: `${address[0].street}, ${address[0].country}, ${address[0].district}, ${address[0].streetNumber}`,
+            location
+        }
     }
 )
 
 
 export const addressSlice = createSlice({
     name: 'address',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-      
+
     },
     extraReducers: (builder) => {
-        builder.addCase(getAddress.fulfilled, (state, action) => {
-            if (action.payload) {
-                state.address = action.payload
+        builder.addCase(getAddress.fulfilled, (state, { payload }) => {
+            if (payload?.address) {
+                state = {
+                    ...state,
+                    address: payload.address,
+                    location: payload.location
+                }
             }
         })
     }

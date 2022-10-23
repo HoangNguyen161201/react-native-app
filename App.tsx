@@ -8,12 +8,14 @@ import { CustomDrawer } from "./components/common"
 import {
     AddTripScreen,
     ContactScreen,
-    DetailScreen, HomeScreen, IntroScreen,
+    DetailScreen,
+    HomeScreen,
+    IntroScreen,
     LoginScreen,
     ProfileScreen,
     RegisterScreen,
     TripScreen,
-    UpdateTripScreen
+    UpdateTripScreen,
 } from "./screens"
 
 const Drawer = createDrawerNavigator()
@@ -32,12 +34,12 @@ export default function App() {
                             drawerActiveTintColor: "#6667C3",
                             drawerLabelStyle: {
                                 marginLeft: -15,
-                                fontSize: 16
+                                fontSize: 16,
                             },
                             headerShown: false,
                         }}
                         drawerContent={(props) => <CustomDrawer {...props} />}
-                        initialRouteName="Trips"
+                        initialRouteName="Intro"
                     >
                         <Drawer.Screen
                             options={{
