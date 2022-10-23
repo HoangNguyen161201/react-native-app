@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import tripsReducer from '../features/tripSlice'
 import expensesReducer from '../features/expenseSlice'
 import userReducer from '../features/userSlice'
+import addressReducer from '../features/addressSlice'
 export const store = configureStore({
   reducer: {
     tripsReducer,
     expensesReducer,
-    userReducer
+    userReducer,
+    addressReducer
   },
 })
 

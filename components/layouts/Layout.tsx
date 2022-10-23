@@ -1,18 +1,38 @@
 import { Avatar, Box, HStack, Text } from "native-base"
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
 import Icon from "react-native-vector-icons/Ionicons"
+import { getAddress } from "../../features/addressSlice"
+import { useAppDispatch } from "../../app/hooks"
 
 const Layout = ({
     children,
     navigation,
     bg,
     color,
+    isEmpty
 }: {
     children: ReactNode
     navigation: any
-    bg: string
+    bg?: string
     color?: string
+    isEmpty?: boolean
 }) => {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const getAddressInterval = setInterval(async ()=> {
+            dispatch(getAddress())
+        }, 5000)
+        return ()=> clearInterval(getAddressInterval)
+    })
+
+    if(isEmpty) {
+        return (
+            <Box flex={1}>
+                {children}
+            </Box>
+        )
+    }
     return (
         <Box flex={1} backgroundColor={bg}>
             <HStack

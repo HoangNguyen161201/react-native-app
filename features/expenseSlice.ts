@@ -12,6 +12,7 @@ export interface IExpense {
   amount: number
   type: TType
   idTrip: string | number[]
+  address: string
 }
 
 // Define a type for the slice state

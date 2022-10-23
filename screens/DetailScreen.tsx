@@ -33,6 +33,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const [isOpenAddExpense, setIsOpen] = useState(false)
     const dispatch = useAppDispatch()
     const expenses = useAppSelector((state) => state.expensesReducer.data)
+    const address = useAppSelector(state => state.addressReducer.address)
 
     useEffect(() => {
         if (expenses && trip) {
@@ -51,6 +52,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
             type: "Travel",
             id: "",
             idTrip: "",
+            address: ""
         }
     }, [])
 
@@ -110,6 +112,12 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         })
         navigation.navigate("Trips")
     }
+
+    useEffect(()=> {
+        if(address) {
+            form.setValue('address', address)
+        }
+    }, [])
 
     return (
         <Layout navigation={navigation} bg={"white"}>
@@ -328,6 +336,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                     <VStack space={2}>
                         <HStack space={4}>
                             <Input
+                                required
                                 isNumber
                                 iconName="cash-outline"
                                 form={form}
@@ -346,6 +355,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                         </HStack>
                         <HStack space={4}>
                             <Input
+                                required
                                 handle={() => {
                                     setDateOrTime({
                                         form,
@@ -362,6 +372,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                                 label={"Date"}
                             />
                             <Input
+                                required 
                                 handle={() => {
                                     setDateOrTime({
                                         mode: "time",
@@ -384,6 +395,13 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                             name={"comment"}
                             placeholder={"Enter comment"}
                             label={"Comment"}
+                        />
+                        <Input
+                            iconName="document-text-outline"
+                            form={form}
+                            name={"address"}
+                            placeholder={"Enter address"}
+                            label={"Address"}
                         />
                     </VStack>
                     <HStack
