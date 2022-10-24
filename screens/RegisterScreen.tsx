@@ -51,9 +51,9 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
             })
             if (response.success) {
                 form.reset({
-                    email: '',
-                    password: '',
-                    confirmPassword: ''
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
                 })
                 navigation.navigate("Login")
             }
@@ -74,7 +74,7 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                         Register now!
                     </Text>
                     <Text color={"gray.500"} fontSize={"14px"}>
-                        Welcome back you've been missed!{" "}
+                        Register an account with your email and password{" "}
                     </Text>
                 </VStack>
                 <VStack space={3} w={"full"}>

@@ -74,18 +74,17 @@ export const IntroScreen = ({ navigation }: { navigation: any }) => {
                         <Text
                             fontSize={"2xl"}
                             fontWeight={"bold"}
-                            w={"220px"}
+                            w={"280px"}
                             textAlign={"center"}
                         >
-                            Managing your money with this app
+                            M-expense trip and cash flow management
                         </Text>
                         <Text
                             color={"gray.500"}
                             textAlign={"center"}
-                            w={"260px"}
+                            w={"280px"}
                         >
-                            hay cung chung to i lam viec o day hay cung chung to
-                            i lam viec o day hay cung chung to i lam viec o day
+                           This app for use by employees that they can use to record details of their expenses
                         </Text>
                     </VStack>
                     <HStack px={8} space={5} w={"full"}>
