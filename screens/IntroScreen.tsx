@@ -1,10 +1,9 @@
-import { Box, Button, HStack, Text, VStack } from "native-base"
+import { Box, HStack, Text, VStack } from "native-base"
+import { useEffect } from "react"
 import { Image, SafeAreaView } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { useEffect } from "react"
-import { auth } from "../utils/dbHelper"
-import * as Location from "expo-location"
 import Layout from "../components/layouts/Layout"
+import { auth } from "../utils/dbHelper"
 
 export const IntroScreen = ({ navigation }: { navigation: any }) => {
     useEffect(() => {
@@ -30,26 +29,6 @@ export const IntroScreen = ({ navigation }: { navigation: any }) => {
                         h={"50%"}
                         borderRadius={12}
                     >
-                        <Button
-                            onPress={async () => {
-                                let { status } =
-                                    await Location.requestForegroundPermissionsAsync()
-                                if (status !== "granted") {
-                                    console.log("error roi nha")
-                                    return
-                                }
-
-                                let location =
-                                    await Location.getCurrentPositionAsync({})
-                                const address =
-                                    await Location.reverseGeocodeAsync(
-                                        location.coords
-                                    )
-                                console.log(location, address)
-                            }}
-                        >
-                            get location
-                        </Button>
                         <Image
                             source={require("../assets/CLOTHE.png")}
                             style={{

@@ -5,7 +5,7 @@ export const FieldItemTrip = ({
     text,
     iconName,
 }: {
-    text?: string
+    text?: string | number
     iconName: string
 }) => {
     return (

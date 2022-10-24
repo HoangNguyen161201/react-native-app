@@ -10,6 +10,8 @@ export interface Trip {
   isRisk: boolean
   img: string
   date: string
+  predictedAmount: number
+  memberCount: number
 }
 
 // Define a type for the slice state

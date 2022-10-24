@@ -14,7 +14,7 @@ import {
     DialogGetPicture,
     Input,
     Loading,
-    Switch
+    Switch,
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
 import { addTrip, Trip } from "../features/tripSlice"
@@ -39,6 +39,8 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
             destination: "",
             isRisk: false,
             date: new Date().toLocaleDateString(),
+            memberCount: 0,
+            predictedAmount: 0,
         }
     }, [])
 
@@ -97,7 +99,9 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             borderWidth={1}
                             borderColor={"#7E80FF"}
                             overflow={"hidden"}
-                            onTouchEnd={()=> setOpenGetPicture(state => !state)}
+                            onTouchEnd={() =>
+                                setOpenGetPicture((state) => !state)
+                            }
                         >
                             <Image
                                 style={{
@@ -160,9 +164,9 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                         <Input
                             handle={() => {
                                 setDateOrTime({
-                                    mode: 'date',
+                                    mode: "date",
                                     form,
-                                    nameField: 'date'
+                                    nameField: "date",
                                 })
                             }}
                             disable={true}
@@ -171,6 +175,22 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             label="Date"
                             iconName="calendar-outline"
                             placeholder="Enter date"
+                        />
+                        <Input
+                            name="memberCount"
+                            form={form}
+                            label="Member count"
+                            iconName="people-outline"
+                            placeholder="Enter member count"
+                            isNumber
+                        />
+                          <Input
+                            name="predictedAmount"
+                            form={form}
+                            label="Predicted amount"
+                            iconName="cash-outline"
+                            placeholder="Enter predicted amount"
+                            isNumber
                         />
                         <Switch form={form} label="Dangerous" name="isRisk" />
                     </VStack>

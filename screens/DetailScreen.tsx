@@ -15,7 +15,7 @@ import {
     Input,
     ItemExpense,
     Loading,
-    Select
+    Select,
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
 import { addExpense, deleteExpenses, IExpense } from "../features/expenseSlice"
@@ -33,7 +33,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const [isOpenAddExpense, setIsOpen] = useState(false)
     const dispatch = useAppDispatch()
     const expenses = useAppSelector((state) => state.expensesReducer.data)
-    const address = useAppSelector(state => state.addressReducer.address )
+    const address = useAppSelector((state) => state.addressReducer.address)
 
     useEffect(() => {
         if (expenses && trip) {
@@ -52,7 +52,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
             type: "Travel",
             id: "",
             idTrip: "",
-            address: ""
+            address: "",
         }
     }, [])
 
@@ -113,9 +113,9 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         navigation.navigate("Trips")
     }
 
-    useEffect(()=> {
-        if(address) {
-            form.setValue('address', address)
+    useEffect(() => {
+        if (address) {
+            form.setValue("address", address)
         }
     }, [])
 
@@ -173,6 +173,15 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                             text={trip?.destination}
                             iconName="location-outline"
                         />
+                        <FieldItemTrip
+                            text={trip?.memberCount}
+                            iconName="people-outline"
+                        />
+                        <FieldItemTrip
+                            text={`$${trip?.predictedAmount}`}
+                            iconName="cash-outline"
+                        />
+
                         <FieldItemTrip
                             text={trip?.date}
                             iconName="calendar-outline"
@@ -372,7 +381,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                                 label={"Date"}
                             />
                             <Input
-                                required 
+                                required
                                 handle={() => {
                                     setDateOrTime({
                                         mode: "time",

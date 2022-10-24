@@ -3,6 +3,7 @@ import { HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
 import { Trip } from "../../features/tripSlice"
+import ItemConfirmData from "./ItemConfirmData"
 
 export interface IConfirmData {
     data?: Trip
@@ -59,81 +60,16 @@ export const ConfirmData = ({
                 <VStack space={3}>
                     {data && (
                         <>
-                            <HStack space={3} alignItems={"center"}>
-                                <Text fontSize={"16px"} w={"100px"}>
-                                    name :
-                                </Text>
-                                <Text
-                                    fontSize={"16px"}
-                                    bg={"#D2DAFF"}
-                                    py={1}
-                                    px={2}
-                                    borderRadius={4}
-                                    flex={1}
-                                >
-                                    {data.name}
-                                </Text>
-                            </HStack>
-                            <HStack space={3} alignItems={"center"}>
-                                <Text fontSize={"16px"} w={"100px"}>
-                                    Destination :
-                                </Text>
-                                <Text
-                                    fontSize={"16px"}
-                                    bg={"#D2DAFF"}
-                                    py={1}
-                                    px={2}
-                                    borderRadius={4}
-                                    flex={1}
-                                >
-                                    {data.destination}
-                                </Text>
-                            </HStack>
-                            <HStack space={3} alignItems={"center"}>
-                                <Text fontSize={"16px"} w={"100px"}>
-                                    Description :
-                                </Text>
-                                <Text
-                                    fontSize={"16px"}
-                                    bg={"#D2DAFF"}
-                                    py={1}
-                                    px={2}
-                                    borderRadius={4}
-                                    flex={1}
-                                >
-                                    {data.description}
-                                </Text>
-                            </HStack>
-                            <HStack space={3} alignItems={"center"}>
-                                <Text fontSize={"16px"} w={"100px"}>
-                                    Date :
-                                </Text>
-                                <Text
-                                    fontSize={"16px"}
-                                    bg={"#D2DAFF"}
-                                    py={1}
-                                    px={2}
-                                    borderRadius={4}
-                                    flex={1}
-                                >
-                                    {data.date}
-                                </Text>
-                            </HStack>
-                            <HStack space={3} alignItems={"center"}>
-                                <Text fontSize={"16px"} w={"100px"}>
-                                    Dangerous :
-                                </Text>
-                                <Text
-                                    fontSize={"16px"}
-                                    bg={"#D2DAFF"}
-                                    py={1}
-                                    px={2}
-                                    borderRadius={4}
-                                    flex={1}
-                                >
-                                    {data.isRisk ? "Yes" : "No"}
-                                </Text>
-                            </HStack>
+                            <ItemConfirmData label="Name: " value={data.name}/>
+                            <ItemConfirmData label="Destination: " value={data.destination}/>
+                            <ItemConfirmData label="Description: " value={data.description}/>
+                            <ItemConfirmData label="Date: " value={data.date}/>
+                            <ItemConfirmData label="Member: " value={data.memberCount}/>
+                            <ItemConfirmData label="Amount: " value={data.predictedAmount}/>
+                            <ItemConfirmData label="Dangerous: " value={data.isRisk ? "Yes" : "No"}/>
+                       
+                         
+                           
                         </>
                     )}
                 </VStack>
