@@ -139,7 +139,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     }, [form.formState.errors])
 
     return (
-        <Layout navigation={navigation} bg={"white"}>
+        <Layout nameRedirect="Trips" navigation={navigation} bg={"white"}>
             <ScrollView>
                 <Box p={"20px"}>
                     <VStack mb={5} space={0}>

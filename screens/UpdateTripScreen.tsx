@@ -78,7 +78,7 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
     }, [form.formState.errors])
 
     return (
-        <Layout navigation={navigation} bg="white">
+        <Layout nameRedirect="Detail" navigation={navigation} bg="white">
             <ScrollView>
                 <VStack space={4} padding={"20px"} flex={1}>
                     <VStack space={1}>

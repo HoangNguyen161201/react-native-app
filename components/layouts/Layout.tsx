@@ -13,22 +13,25 @@ const Layout = ({
     navigation,
     bg,
     color,
-    isEmpty
+    isEmpty,
+    nameRedirect,
 }: {
     children: ReactNode
     navigation: any
     bg?: string
     color?: string
     isEmpty?: boolean
+    nameRedirect?: string
 }) => {
+    console.log(navigation)
     const dispatch = useAppDispatch()
-    const {isLogin, infoUser} = useAppSelector(state => state.userReducer)
+    const { isLogin, infoUser } = useAppSelector((state) => state.userReducer)
 
     useEffect(() => {
-        const getAddressInterval = setInterval(async ()=> {
+        const getAddressInterval = setInterval(async () => {
             dispatch(getAddress())
         }, 5000)
-        return ()=> clearInterval(getAddressInterval)
+        return () => clearInterval(getAddressInterval)
     })
 
     const handleDataTrips = async () => {
@@ -36,21 +39,16 @@ const Layout = ({
         dispatch(getUserInfoByLocal())
         dispatch(getAllByLocal())
         dispatch(getAllExpensesByLocal())
-
     }
 
-    useEffect(()=> {
-        if(isLogin) {
+    useEffect(() => {
+        if (isLogin) {
             handleDataTrips()
         }
     }, [isLogin])
 
-    if(isEmpty) {
-        return (
-            <Box flex={1}>
-                {children}
-            </Box>
-        )
+    if (isEmpty) {
+        return <Box flex={1}>{children}</Box>
     }
     return (
         <Box flex={1} backgroundColor={bg}>
@@ -62,19 +60,39 @@ const Layout = ({
                 alignItems={"center"}
                 justifyContent={"space-between"}
             >
-                <Box
-                    onTouchEnd={() => {
-                        navigation.openDrawer()
-                    }}
-                >
-                    <Icon color={color} name="menu-outline" size={30}></Icon>
-                </Box>
+                {nameRedirect ? (
+                    <Box
+                        onTouchEnd={() => {
+                            navigation.navigate(nameRedirect)
+                        }}
+                    >
+                        <Icon
+                            name="arrow-back-outline"
+                            color={color}
+                            size={30}
+                        />
+                    </Box>
+                ) : (
+                    <Box
+                        onTouchEnd={() => {
+                            navigation.openDrawer()
+                        }}
+                    >
+                        <Icon
+                            color={color}
+                            name="menu-outline"
+                            size={30}
+                        ></Icon>
+                    </Box>
+                )}
                 <HStack alignItems={"center"} space={4}>
                     <Text color={color}>{infoUser?.name || "--"}</Text>
                     <Avatar
                         bg={"#6667C3"}
                         source={{
-                            uri: infoUser?.avatar || "https://avatars.dicebear.com/api/big-smile/:seed.png",
+                            uri:
+                                infoUser?.avatar ||
+                                "https://avatars.dicebear.com/api/big-smile/:seed.png",
                         }}
                         size={"35px"}
                     >
