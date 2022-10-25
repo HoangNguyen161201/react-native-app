@@ -1,15 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Text, useToast, VStack } from "native-base"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { useAppDispatch } from "../app/hooks"
-import { Alert, Input } from "../components/common"
+import { Alert, Input, Loading } from "../components/common"
 import { IUser, loginAccount } from "../features/userSlice"
 import { handleAuth, IResultAuth } from "../utils/dbHelper"
 import { loginForm } from "../utils/validate"
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
+    const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const dispatch = useAppDispatch()
     const defaultValues = useMemo<IUser>(() => {
@@ -46,6 +47,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 },
             })
             if (response.success) {
+                console.log('email', email)
                 dispatch(
                     loginAccount({
                         email,
@@ -58,8 +60,17 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 })
                 navigation.navigate("Home")
             }
+            setIsLoading(false)
         }
     }
+
+    
+    useEffect(() => {
+        const {email, password} = form.formState.errors
+        if(email || password) {
+            setIsLoading(false)
+        }
+    }, [form.formState.errors])
 
     return (
         <ScrollView>
@@ -100,7 +111,9 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 </VStack>
                 <VStack space={4} w={"full"}>
                     <TouchableOpacity
-                        onPressIn={() => {}}
+                        onPressIn={() => {
+                            setIsLoading(true)
+                        }}
                         onPressOut={handleSubmit(submit)}
                         style={{
                             width: "100%",
@@ -132,6 +145,7 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                     </Text>
                 </VStack>
             </VStack>
+            {isLoading && <Loading />}
         </ScrollView>
     )
 }

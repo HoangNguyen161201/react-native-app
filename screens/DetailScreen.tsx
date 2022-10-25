@@ -1,6 +1,15 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { BlurView } from "expo-blur"
-import { Box, HStack, Text, useToast, VStack } from "native-base"
+import {
+    Box,
+    HStack,
+    Menu,
+    Pressable,
+    Text,
+    useToast,
+    VStack,
+} from "native-base"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Animated, Image } from "react-native"
@@ -21,6 +30,7 @@ import Layout from "../components/layouts/Layout"
 import { addExpense, deleteExpenses, IExpense } from "../features/expenseSlice"
 import { deleteTrip } from "../features/tripSlice"
 import { setDateOrTime } from "../utils/DateTimeHelper"
+import { addExpenseForm } from "../utils/validate"
 
 export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
@@ -30,7 +40,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const trip = useAppSelector((state) => state.tripsReducer.tripSelected)
     const [openExpensesList, setOpenExpensesList] = useState(false)
     const fadeAnimate = useRef(new Animated.Value(0)).current
-    const [isOpenAddExpense, setIsOpen] = useState(false)
+    const [isOpenAddExpense, setIsOpenAddExpense] = useState(false)
     const dispatch = useAppDispatch()
     const expenses = useAppSelector((state) => state.expensesReducer.data)
     const address = useAppSelector((state) => state.addressReducer.address)
@@ -45,7 +55,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
 
     const defaultValues = useMemo<IExpense>(() => {
         return {
-            amount: 0,
+            amount: undefined,
             comment: "",
             date: "",
             time: "",
@@ -58,6 +68,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
 
     const form = useForm<IExpense>({
         defaultValues,
+        resolver: yupResolver(addExpenseForm)
     })
 
     const { handleSubmit } = form
@@ -72,7 +83,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         data.push(value)
         await AsyncStorage.setItem("expenses", JSON.stringify(data))
         dispatch(addExpense(value))
-        form.reset(defaultValues)
+        form.reset({ ...defaultValues, address: address || "" })
         toast.show({
             render: () => {
                 return (
@@ -83,6 +94,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                 )
             },
         })
+        setIsOpenAddExpense(false)
         setIsLoading(false)
     }
 
@@ -119,24 +131,60 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         }
     }, [])
 
+    useEffect(() => {
+        const {amount, date, time} = form.formState.errors
+        if(amount || date || time) {
+            setIsLoading(false)
+        }
+    }, [form.formState.errors])
+
     return (
         <Layout navigation={navigation} bg={"white"}>
             <ScrollView>
                 <Box p={"20px"}>
                     <VStack mb={5} space={0}>
-                        <HStack alignItems={"center"} space={3}>
+                        <HStack
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                            space={3}
+                        >
                             <Text fontSize={"20px"} fontWeight={"semibold"}>
                                 {trip?.name}
                             </Text>
-                            <Icon
-                                onPress={() => {
-                                    navigation.navigate("Update")
-                                }}
-                                style={{
-                                    fontSize: 20,
-                                }}
-                                name="open-outline"
-                            ></Icon>
+
+                            <Box alignItems="center">
+                                <Menu
+                                    w="190"
+                                    trigger={(triggerProps) => {
+                                        return (
+                                            <Pressable
+                                                accessibilityLabel="More options menu"
+                                                {...triggerProps}
+                                            >
+                                                <Icon
+                                                    size={20}
+                                                    name="ellipsis-horizontal-outline"
+                                                />
+                                            </Pressable>
+                                        )
+                                    }}
+                                >
+                                    <Menu.Item
+                                        onPress={() => {
+                                            navigation.navigate("Update")
+                                        }}
+                                    >
+                                        Update
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        onPress={() => {
+                                            setIsOpenAlert(true)
+                                        }}
+                                    >
+                                        Delete
+                                    </Menu.Item>
+                                </Menu>
+                            </Box>
                         </HStack>
                         <Text fontSize={"14px"} color={"gray.400"}>
                             {trip?.description}
@@ -226,7 +274,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                         <ScrollView>
                             <TouchableOpacity
                                 onPress={() => {
-                                    setIsOpen(true)
+                                    setIsOpenAddExpense(true)
                                 }}
                                 style={{
                                     marginBottom: 20,
@@ -245,7 +293,6 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                             >
                                 <Text
                                     fontSize={"16px"}
-                                    color={"white"}
                                     textAlign={"center"}
                                 >
                                     Add new expense
@@ -269,40 +316,6 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                     </Animated.View>
                 </Box>
             </ScrollView>
-            <Box
-                w={"full"}
-                bottom={0}
-                position={"absolute"}
-                p={"20px"}
-                bg={"white"}
-            >
-                <TouchableOpacity
-                    onPress={() => {
-                        setIsOpenAlert(true)
-                    }}
-                    style={{
-                        backgroundColor: "#FF6F6F",
-                        borderRadius: 8,
-                        padding: 8,
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowColor: "#00",
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-                        elevation: 5,
-                    }}
-                >
-                    <Text
-                        fontSize={"16px"}
-                        color={"white"}
-                        textAlign={"center"}
-                    >
-                        Delete
-                    </Text>
-                </TouchableOpacity>
-            </Box>
             <BlurView
                 intensity={60}
                 tint="dark"
@@ -333,7 +346,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                         </Text>
                         <Icon
                             onPress={() => {
-                                setIsOpen(false)
+                                setIsOpenAddExpense(false)
                             }}
                             style={{
                                 fontSize: 25,
@@ -372,7 +385,6 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                                         nameField: "date",
                                     })
                                 }}
-                                disable={true}
                                 iconName="calendar-outline"
                                 form={form}
                                 name={"date"}
@@ -389,7 +401,6 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                                         nameField: "time",
                                     })
                                 }}
-                                disable={true}
                                 flex={1}
                                 iconName="time-outline"
                                 form={form}
@@ -420,7 +431,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                     >
                         <TouchableOpacity
                             onPress={() => {
-                                setIsOpen(false)
+                                setIsOpenAddExpense(false)
                             }}
                             style={{
                                 backgroundColor: "#AAAAAA",
@@ -449,7 +460,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                             onPress={handleSubmit(submit)}
                             style={{
                                 minWidth: "47.5%",
-                                backgroundColor: "#AAC4FF",
+                                backgroundColor: "#B1B2FF",
                                 borderRadius: 8,
                                 padding: 8,
                                 shadowOffset: {

@@ -77,7 +77,6 @@ export const TripScreen = ({
     }, [allTrips])
 
     useEffect(() => {
-        console.log(advancedSearch)
         let data: Trip[] = []
         if (allTrips) {
             data = [...allTrips]

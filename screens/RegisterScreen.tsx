@@ -1,9 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { Text, useToast, VStack } from "native-base"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
-import { Input } from "../components/common"
+import { Input, Loading } from "../components/common"
 import { Alert } from "../components/common/Alert"
 import { IUser } from "../features/userSlice"
 import { handleAuth, IResultAuth } from "../utils/dbHelper"
@@ -14,6 +14,7 @@ interface IRegister extends IUser {
 }
 
 export const RegisterScreen = ({ navigation }: { navigation: any }) => {
+    const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
     const defaultValues = useMemo<IRegister>(() => {
         return {
@@ -57,8 +58,17 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                 })
                 navigation.navigate("Login")
             }
+            setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        const {email, password, confirmPassword} = form.formState.errors
+        if(email || password || confirmPassword) {
+            setIsLoading(false)
+            console.log("huy")
+        }
+    }, [form.formState.errors])
 
     return (
         <ScrollView>
@@ -110,7 +120,9 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                 </VStack>
                 <VStack space={4} w={"full"}>
                     <TouchableOpacity
-                        onPressIn={() => {}}
+                        onPressIn={() => {
+                            setIsLoading(true)
+                        }}
                         onPressOut={handleSubmit(submit)}
                         style={{
                             width: "100%",
@@ -142,6 +154,7 @@ export const RegisterScreen = ({ navigation }: { navigation: any }) => {
                     </Text>
                 </VStack>
             </VStack>
+            {isLoading && <Loading />}
         </ScrollView>
     )
 }

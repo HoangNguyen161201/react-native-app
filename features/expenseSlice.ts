@@ -9,7 +9,7 @@ export interface IExpense {
   date: string
   time: string
   comment: string
-  amount: number
+  amount?: number
   type: TType
   idTrip: string | number[]
   address: string

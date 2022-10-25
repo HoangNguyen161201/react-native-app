@@ -1,13 +1,11 @@
-import { BlurView } from "expo-blur"
-import { Box, HStack, Image, ScrollView, Text, useToast, VStack } from "native-base"
+import { HStack, ScrollView, Text, useToast, VStack } from "native-base"
 import { useEffect } from "react"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { Alert, EmptyTrips, Feature, TripItemHome } from "../components/common"
 import Layout from "../components/layouts/Layout"
-import { getAllExpensesByLocal } from "../features/expenseSlice"
-import { getAllByLocal, updateTripSelected } from "../features/tripSlice"
+import { updateTripSelected } from "../features/tripSlice"
 import { BackUpData } from "../utils/dbHelper"
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
@@ -15,14 +13,6 @@ export const HomeScreen = ({ navigation }: { navigation: any }) => {
     const allTrips = useAppSelector((state) => state.tripsReducer.data)
     const isLogin = useAppSelector((state) => state.userReducer.isLogin)
     const dispatch = useAppDispatch()
-    const handleDataTrips = async () => {
-        await dispatch(getAllByLocal())
-        dispatch(getAllExpensesByLocal())
-    }
-
-    useEffect(() => {
-        handleDataTrips()
-    }, [])
 
     useEffect(() => {
         if (!isLogin) {

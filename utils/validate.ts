@@ -13,7 +13,15 @@ export const registerForm = yup.object({
 
 export const addTripForm = yup.object({
     name: yup.string().required("please, don't leave it blank"),
+    date: yup.string().required("please, don't leave it blank"),
     destination: yup.string().required("please, don't leave it blank")
+}) 
+
+
+export const addExpenseForm = yup.object({
+    amount: yup.number().required("please, don't leave it blank"),
+    date: yup.string().required("please, don't leave it blank"),
+    time: yup.string().required("please, don't leave it blank"),
 }) 
 
 export const profileForm = yup.object({

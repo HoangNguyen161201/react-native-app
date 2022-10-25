@@ -16,14 +16,12 @@ export const getAddress = createAsyncThunk(
 
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
-            console.log('error roi nha')
             return
         }
 
         let location = await Location.getCurrentPositionAsync({})
         const data = await Location.reverseGeocodeAsync(location.coords)
         let address = `${data[0].city} city, ${data[0].country}, ${data[0].region} region, ${data[0].street} street`
-        console.log(address)
         return address
     }
 )

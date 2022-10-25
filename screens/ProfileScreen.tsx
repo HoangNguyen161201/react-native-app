@@ -1,16 +1,18 @@
-import { Avatar, Box, Text, VStack } from "native-base"
+import { Avatar, Box, Text, Toast, useToast, VStack } from "native-base"
 import Layout from "../components/layouts/Layout"
 import Icon from "react-native-vector-icons/Ionicons"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { useForm } from "react-hook-form"
 import { useEffect, useMemo, useState } from "react"
-import { DialogGetPicture, Input } from "../components/common"
+import { Alert, DialogGetPicture, Input, Loading } from "../components/common"
 import { IUser, updateProfile } from "../features/userSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { yupResolver } from '@hookform/resolvers/yup'
 import { profileForm } from "../utils/validate"
 
 export const ProfileScreen = ({ navigation }: { navigation: any }) => {
+    const [isLoading, setIsLoading] = useState(false)
+    const toast = useToast()
     const dispatch = useAppDispatch()
     const userInfo = useAppSelector(state => state.userReducer.infoUser)
     const [openGetPicture, setOpenGetPicture] = useState(false)
@@ -45,6 +47,17 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
 
     const submit = async (value: IUser) => {
         dispatch(updateProfile(value))
+        toast.show({
+            render: () => {
+                return (
+                    <Alert
+                        type={"success"}
+                        message={"Add new trip successfully"}
+                    />
+                )
+            },
+        })
+        setIsLoading(false)
     }
     return (
         <Layout navigation={navigation} bg={"white"}>
@@ -135,7 +148,9 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                     </VStack>
                     <Box mt={2} w={"full"}>
                         <TouchableOpacity
-                            onPressIn={() => {}}
+                            onPressIn={() => {
+                                setIsLoading(true)
+                            }}
                             onPressOut={handleSubmit(submit)}
                             style={{
                                 width: "100%",
@@ -169,6 +184,7 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                     setOpenGetPicture(isOpen)
                 }
             />
+            {isLoading && <Loading />}
         </Layout>
     )
 }

@@ -36,6 +36,8 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
             destination: "",
             isRisk: false,
             date: new Date().toLocaleDateString(),
+            memberCount: 0,
+            predictedAmount: 0,
         }
     }, [])
 
@@ -68,6 +70,12 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
         setIsLoading(false)
         navigation.navigate("Trips")
     }
+    useEffect(() => {
+        const { name, destination, date } = form.formState.errors
+        if (name || destination || date) {
+            setIsLoading(false)
+        }
+    }, [form.formState.errors])
 
     return (
         <Layout navigation={navigation} bg="white">
@@ -154,6 +162,7 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
                             placeholder="Enter description"
                         />
                         <Input
+                            required
                             handle={() => {
                                 DateTimePickerAndroid.open({
                                     mode: "date",
@@ -167,12 +176,27 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
                                     },
                                 })
                             }}
-                            disable={true}
                             name="date"
                             form={form}
                             label="Date"
                             iconName="calendar-outline"
                             placeholder="Enter date"
+                        />
+                        <Input
+                            name="memberCount"
+                            form={form}
+                            label="Member count"
+                            iconName="people-outline"
+                            placeholder="Enter member count"
+                            isNumber
+                        />
+                        <Input
+                            name="predictedAmount"
+                            form={form}
+                            label="Predicted amount"
+                            iconName="cash-outline"
+                            placeholder="Enter predicted amount"
+                            isNumber
                         />
                         <Switch
                             value
@@ -185,7 +209,7 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
                         onPressIn={() => setIsLoading(true)}
                         onPressOut={handleSubmit(submit)}
                         style={{
-                            backgroundColor: "#D2DAFF",
+                            backgroundColor: "#B1B2FF",
                             borderRadius: 8,
                             padding: 8,
                             shadowOffset: {
@@ -200,7 +224,7 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
                     >
                         <Text
                             fontSize={"16px"}
-                            color={"#6667C3"}
+                            color={"black"}
                             textAlign={"center"}
                         >
                             Update

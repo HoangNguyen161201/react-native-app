@@ -74,13 +74,13 @@ export const TripItem = ({
             >
                 <Image
                     source={
-                        item.img == "../../assets/trip.png"
+                        item.img == "../assets/trip.png"
                             ? require("../../assets/trip.png")
                             : {
                                   uri: item.img,
                               }
                     }
-                    style={{ width: "100%", borderWidth: 4, height: 120 }}
+                    style={{ borderWidth: 4, height: 120 }}
                 />
                 <BlurView
                     intensity={60}
@@ -113,6 +113,9 @@ export const TripItem = ({
                     bottom={"20px"}
                     left={"20px"}
                 >
+                     <Text color={"gray.200"}>
+                        {item.date}
+                    </Text>
                     <Text color={"white"} fontSize={"lg"} fontWeight={"bold"}>
                         {item.name}
                     </Text>

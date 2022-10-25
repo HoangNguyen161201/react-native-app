@@ -48,12 +48,13 @@ export const tripSlice = createSlice({
     },
     updateTripSelected: (state, action: PayloadAction<Trip>)=> {
       state.tripSelected = action.payload
+
     },
     updateTrip: (state, action: PayloadAction<Trip>)=> {
+      console.log(action.payload)
       let data = [...state.data]
       data = data.map(item => {
         if(item.id == action.payload.id) {
-          console.log(action)
           item = action.payload
         }
         return item

@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import { BlurView } from "expo-blur"
 import { Box, Text, useToast, VStack } from "native-base"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Image } from "react-native"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
@@ -80,6 +80,13 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
             setIsOpenConfirm(false)
         }
     }
+
+    useEffect(() => {
+        const { name, destination, date } = form.formState.errors
+        if (name || destination || date) {
+            setIsLoading(false)
+        }
+    }, [form.formState.errors])
 
     return (
         <Layout navigation={navigation} bg="white">
@@ -162,6 +169,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             placeholder="Enter description"
                         />
                         <Input
+                            required
                             handle={() => {
                                 setDateOrTime({
                                     mode: "date",
@@ -169,7 +177,6 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                                     nameField: "date",
                                 })
                             }}
-                            disable={true}
                             name="date"
                             form={form}
                             label="Date"
@@ -184,7 +191,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             placeholder="Enter member count"
                             isNumber
                         />
-                          <Input
+                        <Input
                             name="predictedAmount"
                             form={form}
                             label="Predicted amount"
@@ -197,7 +204,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                     <TouchableOpacity
                         onPressOut={handleSubmit(submit)}
                         style={{
-                            backgroundColor: "#D2DAFF",
+                            backgroundColor: "#B1B2FF",
                             borderRadius: 8,
                             padding: 8,
                             shadowOffset: {
@@ -212,7 +219,6 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                     >
                         <Text
                             fontSize={"16px"}
-                            color={"#6667C3"}
                             textAlign={"center"}
                         >
                             Add

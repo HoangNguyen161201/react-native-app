@@ -5,12 +5,14 @@ import {
 } from "@react-navigation/drawer"
 import { Avatar, Box, HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { useAppDispatch } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { logOutAccount } from "../../features/userSlice"
 import { auth } from "../../utils/dbHelper"
 
 export const CustomDrawer = (props: DrawerContentComponentProps) => {
     const dispatch = useAppDispatch()
+    const userInfo = useAppSelector((state) => state.userReducer.infoUser)
+    
     return (
         <VStack flex={1}>
             <HStack
@@ -21,15 +23,19 @@ export const CustomDrawer = (props: DrawerContentComponentProps) => {
                 paddingX={"10px"}
                 space={"10px"}
             >
-                <Avatar bg={"#6667C3"} size={"md"}>
-                    --
-                </Avatar>
+                <Avatar
+                    source={{
+                        uri: userInfo?.avatar || "https://avatars.dicebear.com/api/big-smile/:seed.png",
+                    }}
+                    bg={"#6667C3"}
+                    size={"md"}
+                />
                 <Box>
                     <Text fontSize={"16px"} fontWeight={"semibold"}>
-                        Nguyen Quang Hoang
+                        {userInfo?.name || "--"}
                     </Text>
                     <Text color={"gray.400"} fontSize={"14px"}>
-                        hoangdev161201@gmai.com
+                        {userInfo?.email || "--"}
                     </Text>
                 </Box>
             </HStack>

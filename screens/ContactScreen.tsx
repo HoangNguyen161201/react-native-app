@@ -114,7 +114,7 @@ export const ContactScreen = ({ navigation }: { navigation: any }) => {
                                     padding: 10,
                                     borderRadius: 8,
                                 }}
-                                name="logo-instagram"
+                                name="git-branch-outline"
                             />
                         </TouchableOpacity>
                     </HStack>

@@ -7,7 +7,6 @@ export const TripItemHome = ({item, handle}: {item: Trip, handle: any}) => {
         <Box
             onTouchEnd={()=> handle()}
             borderRadius={10}
-            bg={"red.500"}
             w={"330px"}
             mr={"20px"}
             h={"100%"}
@@ -18,7 +17,7 @@ export const TripItemHome = ({item, handle}: {item: Trip, handle: any}) => {
             <Image
                 alt={item.name}
                 source={
-                    item.img == "../../assets/trip.png"
+                    item.img == "../assets/trip.png"
                         ? require("../../assets/trip.png")
                         : {
                               uri: item.img,
@@ -32,7 +31,6 @@ export const TripItemHome = ({item, handle}: {item: Trip, handle: any}) => {
             />
             <BlurView
                 style={{
-                    backgroundColor: "red",
                     position: "absolute",
                     width: "100%",
                     bottom: 0,
@@ -80,6 +78,9 @@ export const TripItemHome = ({item, handle}: {item: Trip, handle: any}) => {
                     bottom={"20px"}
                     left={"20px"}
                 >
+                    <Text color={"gray.200"}>
+                        {item.date}
+                    </Text>
                     <Text color={"white"} fontSize={"lg"} fontWeight={"bold"}>
                         {item.name}
                     </Text>
