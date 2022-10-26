@@ -1,20 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage  from '@react-native-async-storage/async-storage'
+import { Trip } from '../utils/interfaces'
 
-export interface Trip {
-  id: string | number[]
-  name: string
-  description: string
-  destination: string
-  isRisk: boolean
-  img: string
-  date: string
-  predictedAmount: number
-  memberCount: number
-}
-
-// Define a type for the slice state
 interface TripsState {
   data: Array<Trip>,
   tripSelected?: Trip 
@@ -28,14 +16,12 @@ export const getAllByLocal = createAsyncThunk(
   }
 )
 
-// Define the initial state using that type
 const initialState: TripsState = {
   data: [], 
 }
 
 export const tripSlice = createSlice({
   name: 'trips',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     changeData: (state, action: PayloadAction<Array<Trip>>) => {

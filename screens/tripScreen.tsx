@@ -21,11 +21,11 @@ import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { Alert, AlertDialog, EmptyTrips, Loading, TripItem } from "../components/common"
 import {
     AdvancedSearch,
-    IAdvancedSearch
 } from "../components/common/AdvancedSearch"
 import Layout from "../components/layouts/Layout"
 import { deleteExpenses } from "../features/expenseSlice"
-import { deleteTrip, Trip } from "../features/tripSlice"
+import { deleteTrip } from "../features/tripSlice"
+import { AdvancedSearch as IAdvancedSearch, Trip } from "../utils/interfaces"
 
 export const TripScreen = ({
     navigation,
@@ -36,11 +36,14 @@ export const TripScreen = ({
     }
 }) => {
     const dispatch = useAppDispatch()
+
     const allTrips = useAppSelector((state) => state.tripsReducer.data)
     const tripSelected = useAppSelector(
         (state) => state.tripsReducer.tripSelected
     )
+    
     const highAnimate = useRef(new Animated.Value(46)).current
+    
     const [isOpenSearch, setIsOpenSearch] = useState(false)
     const [isOpenAdvancedSearch, setIsOpenAdvancedSearch] = useState(false)
     const [trips, setTrips] = useState<Array<Trip>>()

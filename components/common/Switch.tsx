@@ -1,15 +1,7 @@
 import { Box, Text, VStack } from "native-base"
-import { Switch as NSwitch } from "react-native"
 import { useState } from "react"
-import { UseFormReturn } from "react-hook-form"
-
-interface ISwitch {
-    name: string
-    required?: boolean
-    form: UseFormReturn<any, any>
-    label: string
-    value?: boolean
-}
+import { Switch as NSwitch } from "react-native"
+import { Switch as ISwitch } from "../../utils/interfaces"
 
 export const Switch = ({
     name,

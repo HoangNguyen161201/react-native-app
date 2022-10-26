@@ -4,7 +4,7 @@ import {
     createUserWithEmailAndPassword,
     getAuth,
     signInWithEmailAndPassword,
-    User,
+    User
 } from "firebase/auth"
 import { get, getDatabase, ref, remove, set } from "firebase/database"
 import {
@@ -14,10 +14,8 @@ import {
     FIREBASE_MEASUREMENT_ID,
     FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_PROJECT_ID,
-    FIREBASE_STORAGE_BUCKET,
+    FIREBASE_STORAGE_BUCKET
 } from "../env"
-import { IExpense } from "../features/expenseSlice"
-import { Trip } from "../features/tripSlice"
 
 export interface IResultAuth {
     message: string

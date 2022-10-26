@@ -2,14 +2,7 @@ import { BlurView } from "expo-blur"
 import { HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
-
-interface IAlertDialog {
-    isOpen: boolean
-    setIsOpen: any
-    handle: any
-    title: string
-    description: string
-}
+import { AlertDialog as IAlertDialog } from "../../utils/interfaces"
 
 export const AlertDialog = ({
     isOpen,

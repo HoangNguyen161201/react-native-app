@@ -1,23 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-export type TType = 'Travel' | 'Food' | 'Other'
-
-export interface IExpense {
-  id: string | number[]
-  date: string
-  time: string
-  comment: string
-  amount?: number
-  type: TType
-  idTrip: string | number[]
-  address: string
-}
+import { Expense } from '../utils/interfaces'
 
 // Define a type for the slice state
 interface ExpensesState {
-  data: Array<IExpense>
+  data: Array<Expense>
 }
 
 // Define the initial state using that type
@@ -39,7 +27,7 @@ export const expenseSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    addExpense: (state, action: PayloadAction<IExpense>) => {
+    addExpense: (state, action: PayloadAction<Expense>) => {
       state.data.push(action.payload)
     },
     deleteExpenses: (state, { payload }: PayloadAction<string | number[]>) => {

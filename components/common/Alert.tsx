@@ -1,9 +1,5 @@
 import { Box } from "native-base"
-
-interface IAlert {
-    message: string
-    type: "error" | "success"
-}
+import { Alert as IAlert } from "../../utils/interfaces"
 
 export const Alert = ({ message, type }: IAlert) => {
     return (

@@ -7,7 +7,7 @@ import { Image } from "react-native"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { Trip, updateTrip } from "../features/tripSlice"
+import { updateTrip } from "../features/tripSlice"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { addTripForm } from "../utils/validate"
 import {
@@ -18,6 +18,7 @@ import {
     Switch,
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
+import { Trip } from "../utils/interfaces"
 
 export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -46,13 +47,6 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
         resolver: yupResolver(addTripForm),
     })
 
-    useEffect(() => {
-        if (trip) {
-            form.reset(trip)
-            setImg(trip.img)
-        }
-    }, [trip])
-
     const { handleSubmit } = form
 
     const submit = (value: Trip) => {
@@ -70,6 +64,14 @@ export const UpdateTripScreen = ({ navigation }: { navigation: any }) => {
         setIsLoading(false)
         navigation.navigate("Trips")
     }
+
+    useEffect(() => {
+        if (trip) {
+            form.reset(trip)
+            setImg(trip.img)
+        }
+    }, [trip])
+    
     useEffect(() => {
         const { name, destination, date } = form.formState.errors
         if (name || destination || date) {

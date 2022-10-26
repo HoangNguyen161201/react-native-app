@@ -17,8 +17,9 @@ import {
     Switch,
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
-import { addTrip, Trip } from "../features/tripSlice"
+import { addTrip } from "../features/tripSlice"
 import { setDateOrTime } from "../utils/DateTimeHelper"
+import { Trip } from "../utils/interfaces"
 import { addTripForm } from "../utils/validate"
 
 export const AddTripScreen = ({ navigation }: { navigation: any }) => {
@@ -27,7 +28,9 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
     const [isOpenConfirm, setIsOpenConfirm] = useState(false)
     const [img, setImg] = useState("../assets/trip.png")
     const [openGetPicture, setOpenGetPicture] = useState(false)
+
     const dispatch = useAppDispatch()
+    
     const toast = useToast()
 
     const defaultValues = useMemo<Trip>(() => {

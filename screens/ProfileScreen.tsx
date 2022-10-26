@@ -5,22 +5,26 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { useForm } from "react-hook-form"
 import { useEffect, useMemo, useState } from "react"
 import { Alert, DialogGetPicture, Input, Loading } from "../components/common"
-import { IUser, updateProfile } from "../features/userSlice"
+import { updateProfile } from "../features/userSlice"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from "@hookform/resolvers/yup"
 import { profileForm } from "../utils/validate"
+import { User } from "../utils/interfaces"
 
 export const ProfileScreen = ({ navigation }: { navigation: any }) => {
-    const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
-    const dispatch = useAppDispatch()
-    const userInfo = useAppSelector(state => state.userReducer.infoUser)
+
+    const [isLoading, setIsLoading] = useState(false)
     const [openGetPicture, setOpenGetPicture] = useState(false)
     const [img, setImg] = useState(
         "https://avatars.dicebear.com/api/big-smile/:seed.png"
     )
 
-    const defaultValues = useMemo<IUser>(() => {
+    const dispatch = useAppDispatch()
+
+    const userInfo = useAppSelector((state) => state.userReducer.infoUser)
+
+    const defaultValues = useMemo<User>(() => {
         return {
             name: "",
             email: "",
@@ -28,24 +32,18 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
             address: "",
             facebook: "",
             job: "",
-            avatar: ''
+            avatar: "",
         }
     }, [])
 
     const form = useForm({
         defaultValues,
-        resolver: yupResolver(profileForm)
+        resolver: yupResolver(profileForm),
     })
-
-    useEffect(()=> {
-        if(userInfo) {
-            form.reset(userInfo)
-        }
-    }, [userInfo])
 
     const { handleSubmit } = form
 
-    const submit = async (value: IUser) => {
+    const submit = async (value: User) => {
         dispatch(updateProfile(value))
         toast.show({
             render: () => {
@@ -59,6 +57,12 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
         })
         setIsLoading(false)
     }
+
+    useEffect(() => {
+        if (userInfo) {
+            form.reset(userInfo)
+        }
+    }, [userInfo])
     return (
         <Layout navigation={navigation} bg={"white"}>
             <ScrollView>

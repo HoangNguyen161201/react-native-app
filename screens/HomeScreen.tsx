@@ -10,8 +10,10 @@ import { BackUpData } from "../utils/dbHelper"
 
 export const HomeScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
+
     const allTrips = useAppSelector((state) => state.tripsReducer.data)
     const isLogin = useAppSelector((state) => state.userReducer.isLogin)
+    
     const dispatch = useAppDispatch()
 
     useEffect(() => {

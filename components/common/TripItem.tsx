@@ -2,10 +2,11 @@ import { Box, HStack, Text, VStack } from "native-base"
 import { Image, StyleSheet } from "react-native"
 import React from "react"
 import { BlurView } from "expo-blur"
-import { Trip, updateTripSelected } from "../../features/tripSlice"
+import { updateTripSelected } from "../../features/tripSlice"
 import Swipeable from "react-native-gesture-handler/Swipeable"
 import { useAppDispatch } from "../../app/hooks"
 import Icon from "react-native-vector-icons/Ionicons"
+import { Trip } from "../../utils/interfaces"
 
 export const TripItem = ({
     item,

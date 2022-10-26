@@ -5,29 +5,33 @@ import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { useAppDispatch } from "../app/hooks"
 import { Alert, Input, Loading } from "../components/common"
-import { IUser, loginAccount } from "../features/userSlice"
+import { loginAccount } from "../features/userSlice"
 import { handleAuth, IResultAuth } from "../utils/dbHelper"
+import { User } from "../utils/interfaces"
 import { loginForm } from "../utils/validate"
 
 export const LoginScreen = ({ navigation }: { navigation: any }) => {
-    const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
+
+    const [isLoading, setIsLoading] = useState(false)
+    
     const dispatch = useAppDispatch()
-    const defaultValues = useMemo<IUser>(() => {
+    
+    const defaultValues = useMemo<User>(() => {
         return {
             email: "",
             password: "",
         }
     }, [])
 
-    const form = useForm<IUser>({
+    const form = useForm<User>({
         defaultValues,
         resolver: yupResolver(loginForm),
     })
 
     const { handleSubmit } = form
 
-    const submit = async ({ email, password }: IUser) => {
+    const submit = async ({ email, password }: User) => {
         if (email && password) {
             const response: IResultAuth = await handleAuth({
                 user: {

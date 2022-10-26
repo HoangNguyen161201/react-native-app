@@ -1,6 +1,6 @@
 import { BlurView } from "expo-blur"
 import { Box, Text, VStack, Image} from "native-base"
-import { Trip } from "../../features/tripSlice"
+import { Trip } from "../../utils/interfaces"
 
 export const TripItemHome = ({item, handle}: {item: Trip, handle: any}) => {
     return (

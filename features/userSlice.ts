@@ -1,28 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
 import { createSlice } from "@reduxjs/toolkit"
+import { User } from "../utils/interfaces"
 
-export type TType = "Travel" | "Food" | "Other"
-
-export interface IUser {
-    email: string
-    password?: string
-    name?: string
-    job?: string
-    address?: string
-    phone?: string
-    facebook?: string
-    id?: string
-    avatar?: string
-}
-
-interface IUserState {
-    infoUser?: IUser
+interface UserState {
+    infoUser?: User
     isLogin: boolean
 }
 
-// Define the initial state using that type
-const initialState: IUserState = {
+const initialState: UserState = {
     isLogin: false,
 }
 
@@ -38,7 +24,7 @@ export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        loginAccount: (state, { payload }: PayloadAction<IUser>) => {
+        loginAccount: (state, { payload }: PayloadAction<User>) => {
             state.infoUser = payload
             state.isLogin = true
             AsyncStorage.setItem("user", JSON.stringify(state.infoUser))
@@ -50,7 +36,7 @@ export const userSlice = createSlice({
             state.isLogin = false
             AsyncStorage.clear()
         },
-        updateProfile: (state, { payload }: PayloadAction<IUser>) => {
+        updateProfile: (state, { payload }: PayloadAction<User>) => {
             state.infoUser = {
                 ...state.infoUser,
                 ...payload,

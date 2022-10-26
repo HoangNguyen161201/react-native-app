@@ -1,6 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { BlurView } from "expo-blur"
 import {
     Box,
     HStack,
@@ -8,7 +7,7 @@ import {
     Pressable,
     Text,
     useToast,
-    VStack,
+    VStack
 } from "native-base"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -20,28 +19,30 @@ import { useAppDispatch, useAppSelector } from "../app/hooks"
 import {
     Alert,
     AlertDialog,
-    FieldItemTrip,
-    Input,
-    ItemExpense,
-    Loading,
-    Select,
+    DialogAddExpense,
+    FieldItemTrip, ItemExpense,
+    Loading
 } from "../components/common"
 import Layout from "../components/layouts/Layout"
-import { addExpense, deleteExpenses, IExpense } from "../features/expenseSlice"
+import { addExpense, deleteExpenses } from "../features/expenseSlice"
 import { deleteTrip } from "../features/tripSlice"
-import { setDateOrTime } from "../utils/DateTimeHelper"
+import { Expense } from "../utils/interfaces"
 import { addExpenseForm } from "../utils/validate"
 
 export const DetailScreen = ({ navigation }: { navigation: any }) => {
     const toast = useToast()
+
     const [isLoading, setIsLoading] = useState(false)
-    const [expensesById, setExpenseById] = useState<Array<IExpense>>()
+    const [expensesById, setExpenseById] = useState<Array<Expense>>()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
-    const trip = useAppSelector((state) => state.tripsReducer.tripSelected)
     const [openExpensesList, setOpenExpensesList] = useState(false)
-    const fadeAnimate = useRef(new Animated.Value(0)).current
     const [isOpenAddExpense, setIsOpenAddExpense] = useState(false)
+
+    const fadeAnimate = useRef(new Animated.Value(0)).current
+
     const dispatch = useAppDispatch()
+
+    const trip = useAppSelector((state) => state.tripsReducer.tripSelected)
     const expenses = useAppSelector((state) => state.expensesReducer.data)
     const address = useAppSelector((state) => state.addressReducer.address)
 
@@ -53,7 +54,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         }
     }, [expenses])
 
-    const defaultValues = useMemo<IExpense>(() => {
+    const defaultValues = useMemo<Expense>(() => {
         return {
             amount: undefined,
             comment: "",
@@ -66,14 +67,14 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
         }
     }, [])
 
-    const form = useForm<IExpense>({
+    const form = useForm<Expense>({
         defaultValues,
-        resolver: yupResolver(addExpenseForm)
+        resolver: yupResolver(addExpenseForm),
     })
 
     const { handleSubmit } = form
 
-    const submit = async (value: IExpense) => {
+    const submit = async (value: Expense) => {
         setIsLoading(true)
         const data = [...expenses]
         value.id = uuid.v4()
@@ -132,8 +133,8 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
     }, [])
 
     useEffect(() => {
-        const {amount, date, time} = form.formState.errors
-        if(amount || date || time) {
+        const { amount, date, time } = form.formState.errors
+        if (amount || date || time) {
             setIsLoading(false)
         }
     }, [form.formState.errors])
@@ -291,10 +292,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                                     elevation: 5,
                                 }}
                             >
-                                <Text
-                                    fontSize={"16px"}
-                                    textAlign={"center"}
-                                >
+                                <Text fontSize={"16px"} textAlign={"center"}>
                                     Add new expense
                                 </Text>
                             </TouchableOpacity>
@@ -316,174 +314,7 @@ export const DetailScreen = ({ navigation }: { navigation: any }) => {
                     </Animated.View>
                 </Box>
             </ScrollView>
-            <BlurView
-                intensity={60}
-                tint="dark"
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    display: isOpenAddExpense ? "flex" : "none",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <VStack
-                    space={3}
-                    p={3}
-                    bg={"white"}
-                    borderRadius={"15px"}
-                    w={"90%"}
-                >
-                    <HStack
-                        justifyContent={"space-between"}
-                        alignItems={"center"}
-                    >
-                        <Text fontSize={"lg"} fontWeight={"semibold"}>
-                            Add expense
-                        </Text>
-                        <Icon
-                            onPress={() => {
-                                setIsOpenAddExpense(false)
-                            }}
-                            style={{
-                                fontSize: 25,
-                                color: "black",
-                            }}
-                            name="close-outline"
-                        ></Icon>
-                    </HStack>
-                    <VStack space={2}>
-                        <HStack space={4}>
-                            <Input
-                                required
-                                isNumber
-                                iconName="cash-outline"
-                                form={form}
-                                name={"amount"}
-                                placeholder={"Enter Amount"}
-                                flex={1}
-                                label={"Amount"}
-                            />
-                            <Select
-                                flex={1}
-                                form={form}
-                                name={"type"}
-                                label={"Type"}
-                                options={["Travel", "Food", "Other"]}
-                            />
-                        </HStack>
-                        <HStack space={4}>
-                            <Input
-                                required
-                                handle={() => {
-                                    setDateOrTime({
-                                        form,
-                                        mode: "date",
-                                        nameField: "date",
-                                    })
-                                }}
-                                iconName="calendar-outline"
-                                form={form}
-                                name={"date"}
-                                placeholder={"Enter date"}
-                                flex={1}
-                                label={"Date"}
-                            />
-                            <Input
-                                required
-                                handle={() => {
-                                    setDateOrTime({
-                                        mode: "time",
-                                        form,
-                                        nameField: "time",
-                                    })
-                                }}
-                                flex={1}
-                                iconName="time-outline"
-                                form={form}
-                                name={"time"}
-                                placeholder={"Enter time"}
-                                label={"Time"}
-                            />
-                        </HStack>
-                        <Input
-                            iconName="document-text-outline"
-                            form={form}
-                            name={"comment"}
-                            placeholder={"Enter comment"}
-                            label={"Comment"}
-                        />
-                        <Input
-                            iconName="document-text-outline"
-                            form={form}
-                            name={"address"}
-                            placeholder={"Enter address"}
-                            label={"Address"}
-                        />
-                    </VStack>
-                    <HStack
-                        mt={"5px"}
-                        space={4}
-                        justifyContent={"space-between"}
-                    >
-                        <TouchableOpacity
-                            onPress={() => {
-                                setIsOpenAddExpense(false)
-                            }}
-                            style={{
-                                backgroundColor: "#AAAAAA",
-                                borderRadius: 8,
-                                padding: 8,
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 2,
-                                },
-                                minWidth: "47.5%",
-                                shadowColor: "#00",
-                                shadowOpacity: 0.25,
-                                shadowRadius: 3.84,
-                                elevation: 5,
-                            }}
-                        >
-                            <Text
-                                fontSize={"16px"}
-                                color={"white"}
-                                textAlign={"center"}
-                            >
-                                Cancel
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={handleSubmit(submit)}
-                            style={{
-                                minWidth: "47.5%",
-                                backgroundColor: "#B1B2FF",
-                                borderRadius: 8,
-                                padding: 8,
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 2,
-                                },
-                                shadowColor: "#00",
-                                shadowOpacity: 0.25,
-                                shadowRadius: 3.84,
-                                elevation: 5,
-                            }}
-                        >
-                            <Text
-                                fontSize={"16px"}
-                                color={"white"}
-                                textAlign={"center"}
-                            >
-                                Add
-                            </Text>
-                        </TouchableOpacity>
-                    </HStack>
-                </VStack>
-            </BlurView>
+            <DialogAddExpense form={form} isOpen={isOpenAddExpense} setIsOpen={(value: boolean)=> setIsOpenAddExpense(value)} submit={submit}/>
             <AlertDialog
                 handle={handleDelete}
                 title={"Remove Trip"}

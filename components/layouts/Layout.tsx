@@ -1,12 +1,13 @@
 import { Avatar, Box, HStack, Text } from "native-base"
-import { ReactNode, useEffect } from "react"
+import { useEffect } from "react"
 import Icon from "react-native-vector-icons/Ionicons"
-import { getAddress } from "../../features/addressSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { getAllByLocal } from "../../features/tripSlice"
+import { getAddress } from "../../features/addressSlice"
 import { getAllExpensesByLocal } from "../../features/expenseSlice"
-import { restoreData } from "../../utils/dbHelper"
+import { getAllByLocal } from "../../features/tripSlice"
 import { getUserInfoByLocal } from "../../features/userSlice"
+import { restoreData } from "../../utils/dbHelper"
+import { Layout as ILayout } from "../../utils/interfaces"
 
 const Layout = ({
     children,
@@ -15,14 +16,7 @@ const Layout = ({
     color,
     isEmpty,
     nameRedirect,
-}: {
-    children: ReactNode
-    navigation: any
-    bg?: string
-    color?: string
-    isEmpty?: boolean
-    nameRedirect?: string
-}) => {
+}: ILayout) => {
     console.log(navigation)
     const dispatch = useAppDispatch()
     const { isLogin, infoUser } = useAppSelector((state) => state.userReducer)

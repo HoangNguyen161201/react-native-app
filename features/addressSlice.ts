@@ -1,12 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import * as Location from 'expo-location'
+import { Address } from '../utils/interfaces';
 
-export interface IAddress {
-    address: string,
-}
-
-// Define the initial state using that type
-const initialState: IAddress = {
+const initialState: Address = {
     address: ""
 }
 

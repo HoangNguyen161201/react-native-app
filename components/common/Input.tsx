@@ -1,21 +1,7 @@
 import { Input as BaseInput, Text, VStack } from "native-base"
-import { Controller, UseFormReturn } from "react-hook-form"
+import { Controller } from "react-hook-form"
 import Icon from "react-native-vector-icons/Ionicons"
-
-interface IInput {
-    name: string
-    iconName: string
-    placeholder: string
-    required?: boolean
-    form: UseFormReturn<any, any>
-    label: string
-    disable?: boolean
-    handle?: any
-    flex?: number
-    type?: "text" | "password"
-    match?: string
-    [index: string]: any
-}
+import { Input as IInput } from "../../utils/interfaces"
 
 export const Input = ({
     name,
@@ -32,7 +18,6 @@ export const Input = ({
 }: IInput) => {
     const {
         control,
-        watch,
         formState: { errors },
     } = form
     return (
@@ -64,7 +49,7 @@ export const Input = ({
                                 name={iconName}
                             />
                         }
-                        backgroundColor={disable ? 'gray.200': 'white'}
+                        backgroundColor={disable ? "gray.200" : "white"}
                         borderRadius={8}
                         placeholder={placeholder}
                         fontSize={"14px"}

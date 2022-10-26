@@ -1,29 +1,17 @@
 import { BlurView } from "expo-blur"
 import { HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import Icon from "react-native-vector-icons/Ionicons"
 import { Input } from "."
 import { setDateOrTime } from "../../utils/DateTimeHelper"
-import { useMemo } from "react"
-import { useForm } from "react-hook-form"
-import Icon from "react-native-vector-icons/Ionicons"
+import { DialogSearch } from "../../utils/interfaces"
 
-export interface IAdvancedSearch {
-    name: string
-    destination: string
-    startDate: string
-    endDate: string
-}
-
-interface IAlertDialog {
-    isOpen: boolean
-    setIsOpen: any
-    handle: any
-    form: any
-}
-
-export const AdvancedSearch = ({ isOpen, setIsOpen, handle, form }: IAlertDialog) => {
-
-
+export const AdvancedSearch = ({
+    isOpen,
+    setIsOpen,
+    handle,
+    form,
+}: DialogSearch) => {
     return (
         <BlurView
             intensity={60}
@@ -109,30 +97,29 @@ export const AdvancedSearch = ({ isOpen, setIsOpen, handle, form }: IAlertDialog
                         />
                     </HStack>
                 </VStack>
-                
-                    <TouchableOpacity
-                        onPress={()=> handle()}
-                        style={{
-                            marginTop: 5,
-                            width: '100%',
-                            backgroundColor: "#B1B2FF",
-                            borderRadius: 8,
-                            padding: 8,
-                            shadowOffset: {
-                                width: 0,
-                                height: 2,
-                            },
-                            shadowColor: "#00",
-                            shadowOpacity: 0.25,
-                            shadowRadius: 3.84,
-                            elevation: 5,
-                        }}
-                    >
-                        <Text fontSize={"16px"} textAlign={"center"}>
-                            OK
-                        </Text>
-                    </TouchableOpacity>
-              
+
+                <TouchableOpacity
+                    onPress={() => handle()}
+                    style={{
+                        marginTop: 5,
+                        width: "100%",
+                        backgroundColor: "#B1B2FF",
+                        borderRadius: 8,
+                        padding: 8,
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowColor: "#00",
+                        shadowOpacity: 0.25,
+                        shadowRadius: 3.84,
+                        elevation: 5,
+                    }}
+                >
+                    <Text fontSize={"16px"} textAlign={"center"}>
+                        OK
+                    </Text>
+                </TouchableOpacity>
             </VStack>
         </BlurView>
     )

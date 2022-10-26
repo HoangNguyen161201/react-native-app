@@ -1,12 +1,6 @@
 import { Text, VStack } from "native-base"
 import Icon from "react-native-vector-icons/Ionicons"
-
-interface IFeature {
-    bg: string
-    title: string
-    handle: any
-    iconName: any
-}
+import { Feature as IFeature } from "../../utils/interfaces"
 
 export const Feature = ({bg, title, handle, iconName}: IFeature) => {
     return (

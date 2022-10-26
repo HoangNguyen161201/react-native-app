@@ -2,16 +2,8 @@ import { BlurView } from "expo-blur"
 import { HStack, Text, VStack } from "native-base"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Icon from "react-native-vector-icons/Ionicons"
-import { Trip } from "../../features/tripSlice"
+import { ConfirmData as IConfirmData } from "../../utils/interfaces"
 import ItemConfirmData from "./ItemConfirmData"
-
-export interface IConfirmData {
-    data?: Trip
-    isOpen: boolean
-    setIsOpen: any
-    handle: any
-    setLoading?: any
-}
 
 export const ConfirmData = ({
     data,

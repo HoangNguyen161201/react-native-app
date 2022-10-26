@@ -8,10 +8,10 @@ import {
     VStack,
 } from "native-base"
 import Icon from "react-native-vector-icons/Ionicons"
-import { IExpense } from "../../features/expenseSlice"
+import { Expense } from "../../utils/interfaces"
 import { Alert } from "./Alert"
 
-export const ItemExpense = ({ expense }: { expense: IExpense }) => {
+export const ItemExpense = ({ expense }: { expense: Expense }) => {
     const toast = useToast()
     return (
         <VStack space={2} bg={"#D2DAFF"} p={3} borderRadius={"10px"}>

@@ -5,17 +5,19 @@ import { useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { Input, Loading } from "../components/common"
 import { Alert } from "../components/common/Alert"
-import { IUser } from "../features/userSlice"
 import { handleAuth, IResultAuth } from "../utils/dbHelper"
+import { User } from "../utils/interfaces"
 import { registerForm } from "../utils/validate"
 
-interface IRegister extends IUser {
+interface IRegister extends User {
     confirmPassword: string
 }
 
 export const RegisterScreen = ({ navigation }: { navigation: any }) => {
     const [isLoading, setIsLoading] = useState(false)
+
     const toast = useToast()
+    
     const defaultValues = useMemo<IRegister>(() => {
         return {
             email: "",

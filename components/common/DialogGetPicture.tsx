@@ -7,12 +7,7 @@ import {
     openImagePickerAsync,
 } from "../../utils/pictureHelper"
 import { useEffect, useRef } from "react"
-
-interface IDialogGetPicture {
-    openGetPicture: boolean
-    setOpenGetPicture: any
-    setImg: any
-}
+import {DialogGetPicture as IDialogGetPicture} from '../../utils/interfaces'
 
 export const DialogGetPicture = ({
     openGetPicture,

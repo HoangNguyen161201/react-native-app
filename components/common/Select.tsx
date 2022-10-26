@@ -2,16 +2,7 @@ import { Box, Select as NSelect, Text, VStack } from "native-base"
 import { useState } from "react"
 import { UseFormReturn } from "react-hook-form"
 import Icon from "react-native-vector-icons/Ionicons"
-import { TType } from "../../features/expenseSlice"
-
-interface ISelect {
-    name: string
-    required?: boolean
-    form: UseFormReturn<any, any>
-    label: string
-    options: Array<TType>
-    flex?: number
-}
+import { Select as ISelect, TType } from "../../utils/interfaces"
 
 export const Select = ({
     name,
