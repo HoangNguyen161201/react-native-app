@@ -30,9 +30,10 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
     const [openGetPicture, setOpenGetPicture] = useState(false)
 
     const dispatch = useAppDispatch()
-    
+
     const toast = useToast()
 
+    // Create initial default data for the form
     const defaultValues = useMemo<Trip>(() => {
         return {
             id: "",
@@ -47,13 +48,17 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
         }
     }, [])
 
+    // form initialization
     const form = useForm<Trip>({
         defaultValues,
+        //validation
         resolver: yupResolver(addTripForm),
     })
 
     const { handleSubmit } = form
 
+    // Function after the user presses submit and the input is valid,
+    // The data will be saved to the state and will open a dialog so the user can choose whether to confirm or not
     const submit = (value: Trip) => {
         const newTrip = {
             ...value,
@@ -63,6 +68,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
         setIsOpenConfirm(true)
     }
 
+    // After user confirm, data will be pushed to AsyncStorage.
     const handleAdd = async () => {
         if (data) {
             dispatch(addTrip(data))
@@ -220,10 +226,7 @@ export const AddTripScreen = ({ navigation }: { navigation: any }) => {
                             elevation: 5,
                         }}
                     >
-                        <Text
-                            fontSize={"16px"}
-                            textAlign={"center"}
-                        >
+                        <Text fontSize={"16px"} textAlign={"center"}>
                             Add
                         </Text>
                     </TouchableOpacity>

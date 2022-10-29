@@ -23,6 +23,7 @@ export interface IResultAuth {
     account?: User
 }
 
+// Set options to connect to firebase
 const firebaseConfig = {
     apiKey: FIREBASE_KEY,
     authDomain: FIREBASE_DOMAIN,
@@ -33,7 +34,70 @@ const firebaseConfig = {
     measurementId: FIREBASE_MEASUREMENT_ID,
 }
 
+// Connect to RealTime Database
 let myApp = initializeApp(firebaseConfig)
+const db = getDatabase(myApp)
+
+//Back up data
+export const BackUpData = async () => {
+    const trips = await AsyncStorage.getItem("trips")
+    const expenses = await AsyncStorage.getItem("expenses")
+    const user = await AsyncStorage.getItem("user")
+
+    remove(ref(db, "Users/" + auth.currentUser?.uid))
+
+    await set(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Info"),
+        user ? JSON.parse(user) : {}
+    )
+
+    await set(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Trips"),
+        trips ? JSON.parse(trips) : []
+    )
+    await set(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Expenses"),
+        expenses ? JSON.parse(expenses) : []
+    )
+}
+
+export const restoreData = async () => {
+    const trips = await get(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Trips")
+    )
+    const expenses = await get(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Expenses")
+    )
+    const userInfo = await get(
+        ref(db, "Users/" + auth.currentUser?.uid + "/Info")
+    )
+
+    let tripsArr: any[] = []
+    let expensesArr: any[] = []
+
+    if (trips) {
+        trips.forEach((item) => {
+            tripsArr.push(item)
+        })
+    }
+
+    if (expenses) {
+        expenses.forEach((item) => {
+            expensesArr.push(item)
+        })
+    }
+
+    //Set data to local
+    if (userInfo) {
+        await AsyncStorage.setItem("user", JSON.stringify(userInfo))
+    }
+    await AsyncStorage.setItem("trips", JSON.stringify(tripsArr))
+    await AsyncStorage.setItem("expenses", JSON.stringify(expensesArr))
+}
+
+
+
+
 
 // auth
 export const auth = getAuth(myApp)
@@ -86,63 +150,3 @@ export const handleAuth = async ({
     }
 }
 
-// action with db
-const db = getDatabase(myApp)
-
-//Back up data
-export const BackUpData = async () => {
-    const trips = await AsyncStorage.getItem("trips")
-    const expenses = await AsyncStorage.getItem("expenses")
-    const user = await AsyncStorage.getItem("user")
-
-    remove(ref(db, "Users/" + auth.currentUser?.uid))
-
-    await set(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Info"),
-        user ? JSON.parse(user) : {}
-    )
-
-    await set(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Trips"),
-        trips ? JSON.parse(trips) : []
-    )
-    await set(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Expenses"),
-        expenses ? JSON.parse(expenses) : []
-    )
-}
-
-export const restoreData = async () => {
-    const trips = await get(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Trips")
-    )
-    const expenses = await get(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Expenses")
-    )
-    const userInfo = await get(
-        ref(db, "Users/" + auth.currentUser?.uid + "/Info")
-    )
-
-    let tripsArr: any[] = []
-    let expensesArr: any[] = []
-
-    if (trips) {
-        trips.forEach((item) => {
-            tripsArr.push(item)
-        })
-    }
-
-    if (expenses) {
-        expenses.forEach((item) => {
-            expensesArr.push(item)
-        })
-    }
-
-    console.log(userInfo, "huy")
-    //Set data to local
-    if (userInfo) {
-        await AsyncStorage.setItem("user", JSON.stringify(userInfo))
-    }
-    await AsyncStorage.setItem("trips", JSON.stringify(tripsArr))
-    await AsyncStorage.setItem("expenses", JSON.stringify(expensesArr))
-}
