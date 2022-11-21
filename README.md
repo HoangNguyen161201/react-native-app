@@ -7,19 +7,19 @@ The application that I developed is called M-Expense, it allows the staff to rec
 
 * if you download my source code with google drive then you don't need to add environment variables.
 * if you clone from GitHub then you need to create .env file containing the following environment variables (name variable = value):
-    * CONTACT_NAME
-    * CONTACT_EMAIL
-    * CONTACT_PHONE
-    * CONTACT_FACEBOOK
-    * CONTACT_DESCRIPTION
-    * CONTACT_JOB = Software developer
-    * KEY (data to config connect to firebase)
-    * DOMAIN (data to config connect to firebase)
-    * PROJECT_ID (data to config connect to firebase)
-    * STORAGE_BUCKET (data to config connect to firebase)
-    * MESSAGING_SENDER_ID (data to config connect to firebase)
-    * APP_ID (data to config connect to firebase)
-    * MEASUREMENT_ID (data to config connect to firebase)
+    * **CONTACT_NAME**
+    * **CONTACT_EMAIL**
+    * **CONTACT_PHONE**
+    * **CONTACT_FACEBOOK**
+    * **CONTACT_DESCRIPTION**
+    * **CONTACT_JOB** = Software developer
+    * **KEY** (data to config connect to firebase)
+    * **DOMAIN** (data to config connect to firebase)
+    * **PROJECT_ID** (data to config connect to firebase)
+    * **STORAGE_BUCKET** (data to config connect to firebase)
+    * **MESSAGING_SENDER_ID** (data to config connect to firebase)
+    * **APP_ID** (data to config connect to firebase)
+    * **MEASUREMENT_ID** (data to config connect to firebase)
 
 ---
 ### how to run the project
