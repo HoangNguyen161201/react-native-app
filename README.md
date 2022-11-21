@@ -32,12 +32,13 @@ First you need to download all the necessary tools and platforms to run the proj
 * [video tutorial to use react native with android studio ](https://www.youtube.com/watch?v=6tEV6H07Fd8)
 
 use visual code to run the project, then launch the following commands to download the necessary libraries and platforms:
-   + npm install -g npm (in terminal)
-   + npm install -g expo-cli (in terminal)
-   + npm install (in terminal)
+   + npm install -g npm or npm install --global yarn (in terminal)
+   + npm/yarn install -g expo-cli (in terminal)
+   + npm/yarn install (in terminal)
    + npx expo install (in terminal)
    + Open a Virtual Phone (in android studio)
-   + Press a in terminal to launch the project
+   + npm/yarn start (in terminal)
+   + Press 'a' in terminal to launch the project
 
 ---
 ### Demo link: [Here](https://www.youtube.com/watch?v=StzdeQoBjNc&t=529s 'app M-expense (react-native)')
