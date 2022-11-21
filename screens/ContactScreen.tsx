@@ -105,7 +105,7 @@ export const ContactScreen = ({ navigation }: { navigation: any }) => {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => redirectToWeb(ENV_CONTACT_FACEBOOK)}
+                            onPress={() => redirectToWeb("https://github.com/HoangNguyen161201")}
                         >
                             <Icon
                                 size={20}

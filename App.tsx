@@ -17,10 +17,12 @@ import {
     TripScreen,
     UpdateTripScreen,
 } from "./screens"
+import {LogBox} from 'react-native'
 
 const Drawer = createDrawerNavigator()
 
 export default function App() {
+    LogBox.ignoreAllLogs();
     return (
         <Provider store={store}>
             <NativeBaseProvider>
@@ -39,7 +41,7 @@ export default function App() {
                             headerShown: false,
                         }}
                         drawerContent={(props) => <CustomDrawer {...props} />}
-                        initialRouteName="Trips"
+                        initialRouteName="Intro"
                     >
                         <Drawer.Screen
                             options={{

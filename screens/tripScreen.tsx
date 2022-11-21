@@ -4,7 +4,7 @@ import {
     Input as NInput,
     Text,
     useToast,
-    VStack
+    VStack,
 } from "native-base"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -14,14 +14,18 @@ import {
     Image,
     SafeAreaView,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
 } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { Alert, AlertDialog, EmptyTrips, Loading, TripItem } from "../components/common"
 import {
-    AdvancedSearch,
-} from "../components/common/AdvancedSearch"
+    Alert,
+    AlertDialog,
+    EmptyTrips,
+    Loading,
+    TripItem,
+} from "../components/common"
+import { AdvancedSearch } from "../components/common/AdvancedSearch"
 import Layout from "../components/layouts/Layout"
 import { deleteExpenses } from "../features/expenseSlice"
 import { deleteTrip } from "../features/tripSlice"
@@ -41,9 +45,9 @@ export const TripScreen = ({
     const tripSelected = useAppSelector(
         (state) => state.tripsReducer.tripSelected
     )
-    
+
     const highAnimate = useRef(new Animated.Value(46)).current
-    
+
     const [isOpenSearch, setIsOpenSearch] = useState(false)
     const [isOpenAdvancedSearch, setIsOpenAdvancedSearch] = useState(false)
     const [trips, setTrips] = useState<Array<Trip>>()
@@ -81,40 +85,42 @@ export const TripScreen = ({
 
     useEffect(() => {
         let data: Trip[] = []
-        if (allTrips) {
+        if (allTrips.length > 0) {
             data = [...allTrips]
-        }
-        if (advancedSearch) {
-            let dataSearch = [...data]
-            if (advancedSearch.name) {
-                dataSearch = dataSearch.filter((item) =>
-                    item.name.includes(advancedSearch.name)
-                )
-            }
-            if (advancedSearch.destination) {
-                dataSearch = dataSearch.filter((item) =>
-                    item.destination.includes(advancedSearch.destination)
-                )
-            }
-            if (advancedSearch.startDate && advancedSearch.endDate) {
-                dataSearch = dataSearch.filter((item) => {
-                    if (
-                        new Date(item.date) >=
-                            new Date(advancedSearch.startDate) &&
-                        new Date(item.date) <= new Date(advancedSearch.endDate)
-                    ) {
-                        return true
-                    }
-                    return false
-                })
-            }
-            setTrips(dataSearch)
-        } else {
-            if (searchByTitle) {
-                const dataSearch = data.filter((item) =>
-                    item.name.includes(searchByTitle)
-                )
+            if (advancedSearch) {
+                let dataSearch = [...data]
+                if (advancedSearch.name) {
+                    dataSearch = dataSearch.filter((item) =>
+                        item.name.includes(advancedSearch.name)
+                    )
+                }
+                if (advancedSearch.destination) {
+                    dataSearch = dataSearch.filter((item) =>
+                        item.destination.includes(advancedSearch.destination)
+                    )
+                }
+                if (advancedSearch.startDate && advancedSearch.endDate) {
+                    dataSearch = dataSearch.filter((item) => {
+                        if (
+                            new Date(item.date) >=
+                                new Date(advancedSearch.startDate) &&
+                            new Date(item.date) <=
+                                new Date(advancedSearch.endDate)
+                        ) {
+                            return true
+                        }
+                        return false
+                    })
+                }
+                console.log
                 setTrips(dataSearch)
+            } else {
+                if (searchByTitle) {
+                    const dataSearch = data.filter((item) => 
+                        item.name.includes(searchByTitle)
+                    )
+                    setTrips(dataSearch)
+                }
             }
         }
     }, [searchByTitle, advancedSearch])
@@ -146,13 +152,13 @@ export const TripScreen = ({
         navigation.navigate("Trips")
     }
 
-    const handleReset = ()=> {
-        setSearchByTile('')
+    const handleReset = () => {
+        setSearchByTile("")
         setAdvancedSearch({
-            destination: '',
-            endDate: '',
-            name: '',
-            startDate: '',
+            destination: "",
+            endDate: "",
+            name: "",
+            startDate: "",
         })
     }
 
@@ -208,7 +214,7 @@ export const TripScreen = ({
                         ></Icon>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={ handleReset }
+                        onPress={handleReset}
                         style={[
                             style.search,
                             {
@@ -312,7 +318,7 @@ export const TripScreen = ({
                             )}
                         />
                     ) : (
-                        <EmptyTrips navigation={navigation}/>
+                        <EmptyTrips navigation={navigation} />
                     )}
                 </Box>
                 {!trips && <Loading />}

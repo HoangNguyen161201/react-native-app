@@ -17,7 +17,6 @@ const Layout = ({
     isEmpty,
     nameRedirect,
 }: ILayout) => {
-    console.log(navigation)
     const dispatch = useAppDispatch()
     const { isLogin, infoUser } = useAppSelector((state) => state.userReducer)
 
@@ -29,7 +28,6 @@ const Layout = ({
     })
 
     const handleDataTrips = async () => {
-        await restoreData()
         dispatch(getUserInfoByLocal())
         dispatch(getAllByLocal())
         dispatch(getAllExpensesByLocal())

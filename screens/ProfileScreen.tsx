@@ -50,7 +50,7 @@ export const ProfileScreen = ({ navigation }: { navigation: any }) => {
                 return (
                     <Alert
                         type={"success"}
-                        message={"Add new trip successfully"}
+                        message={"Update profile successfully"}
                     />
                 )
             },

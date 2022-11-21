@@ -6,6 +6,7 @@ import Layout from "../components/layouts/Layout"
 import { auth } from "../utils/dbHelper"
 
 export const IntroScreen = ({ navigation }: { navigation: any }) => {
+    
     useEffect(() => {
         if (auth.currentUser) {
             navigation.navigate("Trips")

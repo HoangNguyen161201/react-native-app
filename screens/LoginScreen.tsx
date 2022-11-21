@@ -51,7 +51,6 @@ export const LoginScreen = ({ navigation }: { navigation: any }) => {
                 },
             })
             if (response.success) {
-                console.log('email', email)
                 dispatch(
                     loginAccount({
                         email,
